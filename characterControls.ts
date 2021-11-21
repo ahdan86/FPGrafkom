@@ -67,5 +67,60 @@ export class CharacterControls {
             this.currentAction = play;
         }
         this.mixer.update(delta);
+        if(this.currentAction == 'Run' || this.currentAction == 'Walk'){
+            var angelYCameraDirection = Math.atan2(
+                (this.camera.position.x - this.model.position.x),
+                (this.camera.position.z - this.model.position.z))
+
+            var directionOffset = this.directionOffset(keysPressed)
+
+            this.rotateQuaternion.setFromAxisAngle(this.rotateAngle, angelYCameraDirection + directionOffset)
+            this.model.quaternion.rotateTowards(this.rotateQuaternion, 0.2)
+
+            this.camera.getWorldDirection(this.walkDirection)
+            this.walkDirection.y = 0
+            this.walkDirection.normalize()
+            this.walkDirection.applyAxisAngle(this.rotateAngle, directionOffset)
+
+            const moveX = this.walkDirection.x * velocity * delta
+            const moveZ = this.walkDirection.z * velocity * delta
+            this.model.position.x += moveX
+            this.model.position.z += moveZ
+        }
+
+        private updateCameraTarget(moveX: number, moveZ: number) {
+            this.camera.position.x += moveX
+            this.camera.position.z += moveZ
+
+            this.cameraTarget.x = this.model.position.x
+            this.cameraTarget.y = this.model.position.y + 1
+            this.cameraTarget.z = this.model.position.z
+            this.orbitControl.target = this.cameraTarget
+        }
+
+        private directionOffset(keysPressed: any) {
+            var directionOffset = 0
+    
+            if (keysPressed[W]) {
+                if (keysPressed[A]) {
+                    directionOffset = Math.PI / 4
+                } else if (keysPressed[D]) {
+                    directionOffset = - Math.PI / 4
+                }
+            } else if (keysPressed[S]) {
+                if (keysPressed[A]) {
+                    directionOffset = Math.PI / 4 + Math.PI / 2
+                } else if (keysPressed[D]) {
+                    directionOffset = -Math.PI / 4 - Math.PI / 2
+                } else {
+                    directionOffset = Math.PI
+                }
+            } else if (keysPressed[A]) {
+                directionOffset = Math.PI / 2
+            } else if (keysPressed[D]) {
+                directionOffset = - Math.PI / 2
+            }
+    
+            return directionOffset
     }
 }
