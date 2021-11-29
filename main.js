@@ -52,7 +52,8 @@ var characterControls;
 new GLTFLoader().load("./Soldier.glb", function (gltf) {
     const model = gltf.scene;
     model.traverse(function (object) {
-        if (object.isMesh) object.castShadow = true;
+        if (object.isMesh)
+            object.castShadow = true;
     });
     scene.add(model);
     const gltfAnimations = gltf.animations;
@@ -61,30 +62,23 @@ new GLTFLoader().load("./Soldier.glb", function (gltf) {
     gltfAnimations
         .filter((a) => a.name != "TPose")
         .forEach((a) => {
-            animationsMap.set(a.name, mixer.clipAction(a));
-        });
+        animationsMap.set(a.name, mixer.clipAction(a));
+    });
     characterControls = new CharacterControls(model, mixer, animationsMap, controls, camera, "Idle");
 });
 //Key Control
 const keysPressed = {};
-document.addEventListener(
-    "keydown",
-    (event) => {
-        if (event.shiftKey && characterControls) {
-            characterControls.switchRunToggle();
-        } else {
-            keysPressed[event.key.toLowerCase()] = true;
-        }
-    },
-    false
-);
-document.addEventListener(
-    "keyup",
-    (event) => {
-        keysPressed[event.key.toLowerCase()] = false;
-    },
-    false
-);
+document.addEventListener("keydown", (event) => {
+    if (event.shiftKey && characterControls) {
+        characterControls.switchRunToggle();
+    }
+    else {
+        keysPressed[event.key.toLowerCase()] = true;
+    }
+}, false);
+document.addEventListener("keyup", (event) => {
+    keysPressed[event.key.toLowerCase()] = false;
+}, false);
 const clock = new THREE.Clock();
 let mainLoop = function () {
     let mixerUpdateDelta = clock.getDelta();

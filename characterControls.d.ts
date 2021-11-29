@@ -24,4 +24,6 @@ export declare class CharacterControls {
     constructor(model: THREE.Group, mixer: THREE.AnimationMixer, animationsMap: Map<string, THREE.AnimationAction>, orbitControl: OrbitControls, camera: THREE.Camera, currentAction: string);
     switchRunToggle(): void;
     update(delta: number, keysPressed: any): void;
+    private updateCameraTarget;
+    private directionOffset;
 }
