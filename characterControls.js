@@ -5,6 +5,7 @@ export class CharacterControls {
         this.A = "a";
         this.S = "s";
         this.D = "d";
+        this.space = "space";
         this.SHIFT = "shift";
         this.DIRECTIONS = [this.W, this.A, this.S, this.D];
         this.animationsMap = new Map();
@@ -15,7 +16,7 @@ export class CharacterControls {
         this.rotateAngle = new THREE.Vector3(0, 1, 0);
         this.rotateQuaternion = new THREE.Quaternion();
         this.cameraTarget = new THREE.Vector3();
-        this.fadeDuration = 2;
+        this.fadeDuration = 0.1;
         this.runVelocity = 5;
         this.walkVelocity = 2;
         this.model = model;
