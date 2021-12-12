@@ -1,11 +1,11 @@
 import * as THREE from "./node_modules/three/src/Three.js";
 export class CharacterControls {
-    constructor(model, mixer, animationsMap, orbitControl, camera, currentAction, boxBody) {
+    constructor(model, mixer, animationsMap, orbitControl, camera, currentAction, rigidBody) {
         this.W = "w";
         this.A = "a";
         this.S = "s";
         this.D = "d";
-        this.space = "space";
+        this.space = " ";
         this.SHIFT = "shift";
         this.DIRECTIONS = [this.W, this.A, this.S, this.D];
         this.animationsMap = new Map();
@@ -19,8 +19,9 @@ export class CharacterControls {
         this.fadeDuration = 0.1;
         this.runVelocity = 5;
         this.walkVelocity = 2;
+        this.jumpVelocity= 2;
         this.model = model;
-        this.boxBody = boxBody;
+        this.rigidBody = rigidBody;
         this.mixer = mixer;
         this.animationsMap = animationsMap;
         this.currentAction = currentAction;
@@ -61,7 +62,7 @@ export class CharacterControls {
             this.rotateQuaternion.setFromAxisAngle(this.rotateAngle, angelYCameraDirection + directionOffset);
             this.model.quaternion.rotateTowards(this.rotateQuaternion, 0.2);
             this.camera.getWorldDirection(this.walkDirection);
-            this.walkDirection.y = 0;
+            // this.walkDirection.y = 0;
             this.walkDirection.normalize();
             this.walkDirection.applyAxisAngle(this.rotateAngle, directionOffset);
             const velocity = this.currentAction == 'Run' ? this.runVelocity : this.walkVelocity;
@@ -69,10 +70,17 @@ export class CharacterControls {
             const moveZ = this.walkDirection.z * velocity * delta;
             this.model.position.x += moveX;
             this.model.position.z += moveZ;
-            this.boxBody.position.x += moveX;
-            this.boxBody.position.z += moveZ;
-            // this.model.position.copy(this.boxBody.position);
+            this.rigidBody.position.x += moveX;
+            this.rigidBody.position.z += moveZ;
+            // this.model.position.copy(this.rigidBody.position);
             this.updateCameraTarget(moveX, moveZ);
+        }
+        const moveY = 15 * delta;
+        if(keysPressed[this.space]){
+            console.log("masuk");
+            console.log(moveY);
+            this.model.position.y += moveY;
+            this.rigidBody.position.y += moveY;
         }
     }
     updateCameraTarget(moveX, moveZ) {
