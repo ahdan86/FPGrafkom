@@ -1,6 +1,6 @@
 import * as THREE from "./node_modules/three/src/Three.js";
 export class CharacterControls {
-    constructor(model, mixer, animationsMap, orbitControl, camera, currentAction) {
+    constructor(model, mixer, animationsMap, orbitControl, camera, currentAction, boxBody) {
         this.W = "w";
         this.A = "a";
         this.S = "s";
@@ -20,6 +20,7 @@ export class CharacterControls {
         this.runVelocity = 5;
         this.walkVelocity = 2;
         this.model = model;
+        this.boxBody = boxBody;
         this.mixer = mixer;
         this.animationsMap = animationsMap;
         this.currentAction = currentAction;
@@ -68,6 +69,9 @@ export class CharacterControls {
             const moveZ = this.walkDirection.z * velocity * delta;
             this.model.position.x += moveX;
             this.model.position.z += moveZ;
+            this.boxBody.position.x += moveX;
+            this.boxBody.position.z += moveZ;
+            // this.model.position.copy(this.boxBody.position);
             this.updateCameraTarget(moveX, moveZ);
         }
     }

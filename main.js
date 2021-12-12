@@ -46,13 +46,13 @@ world.gravity.set(0,-10,0);
 world.broadphase = new CANNON.NaiveBroadphase();
 let timestamp = 1.0/60.0;
 
-let plane = new CANNON.Plane();
+let plane = new CANNON.Box(new CANNON.Vec3(20,20,0.1));
 let planeBody = new CANNON.Body({shape:plane, mass:0});
 planeBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1,0,0), -Math.PI/2);
 world.addBody(planeBody);
 
 //Physics Test
-let box = new CANNON.Box(new CANNON.Vec3(0.5,0.5,0.5));
+let box = new CANNON.Box(new CANNON.Vec3(0.01,0.01,0.01));
 let boxBody = new CANNON.Body({shape:box, mass:5});
 boxBody.position.set(0,5,0);
 world.addBody(boxBody);
@@ -100,7 +100,7 @@ new GLTFLoader().load("./Soldier.glb", function (gltf) {
         .forEach((a) => {
         animationsMap.set(a.name, mixer.clipAction(a));
     });
-    characterControls = new CharacterControls(model, mixer, animationsMap, controls, camera, "Idle");
+    characterControls = new CharacterControls(model, mixer, animationsMap, controls, camera, "Idle", boxBody);
 });
 /*-------------------------------------*/
 
@@ -123,9 +123,15 @@ document.addEventListener("keyup", (event) => {
 const clock = new THREE.Clock();
 let mainLoop = function () {
     let mixerUpdateDelta = clock.getDelta();
+    let data = clock.getElapsedTime()%2;
     world.step(timestamp);
     // bMesh.position.copy(boxBody.position);
+    // boxBody.position.copy(model.position);
     model.position.copy(boxBody.position);
+    if(data%2<0.1){
+        console.log('player',model.position);
+        console.log('rigid',boxBody.position);
+    }
     if (characterControls) {
         characterControls.update(mixerUpdateDelta, keysPressed);
     }
