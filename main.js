@@ -311,7 +311,7 @@ world.addBody(boxBody);
 let controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.minDistance = 5;
-controls.maxDistance = 15;
+controls.maxDistance = 40;
 controls.enablePan = false;
 controls.maxPolarAngle = Math.PI / 2 - 0.05;
 controls.update();
@@ -355,6 +355,30 @@ new GLTFLoader().load("./Soldier.glb", function (gltf) {
     });
     characterControls = new CharacterControls(model, mixer, animationsMap, controls, camera, "Idle", rigidBodyPlayer);
 });
+
+function createWall(x,y,z,posX,posY,posZ){
+    let bGeo = new THREE.BoxGeometry(x,y,z);
+    const loader = new THREE.TextureLoader();
+    const texture = loader.load("image.png");
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    texture.magFilter = THREE.NearestFilter;
+    let bMat = new THREE.MeshBasicMaterial({color:0xffffff, map:texture});
+    let bMesh = new THREE.Mesh(bGeo, bMat);
+    // const repeats = planeSize / 2;
+    // texture.repeat.set(repeats, repeats);
+    scene.add(bMesh);
+
+    let box = new CANNON.Box(new CANNON.Vec3(x/2,y/2,z/2));
+    let boxBody = new CANNON.Body({shape:box, mass:0});
+    boxBody.position.set(posX,posY,posZ);
+    world.addBody(boxBody);
+
+    bMesh.position.copy(boxBody.position);
+    bMesh.quaternion.copy(boxBody.quaternion);
+}
+
+let wall1 = createWall(0.1,40,40,20,20,0);
 
 let rigidPlayer = new CANNON.Box(new CANNON.Vec3(0.4,0.8,0.4));
 let rigidBodyPlayer = new CANNON.Body({shape:rigidPlayer, mass:5});
