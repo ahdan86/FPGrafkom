@@ -311,7 +311,7 @@ world.addBody(boxBody);
 let controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.minDistance = 5;
-controls.maxDistance = 40;
+controls.maxDistance = 15;
 controls.enablePan = false;
 controls.maxPolarAngle = Math.PI / 2 - 0.05;
 controls.update();
@@ -329,33 +329,7 @@ light.shadow.mapSize.height = 1024;
 scene.add(light);
 /*-------------------------------------*/
 
-/*--------------Create Plane-------------*/
-createPlane();
-/*-------------------------------------*/
-
-/*--------------Load Model with Instantiate Character Controls-------------*/
-var characterControls;
-let model = new THREE.Object3D();
-let raycaster;
-new GLTFLoader().load("./Soldier.glb", function (gltf) {
-    model = gltf.scene;
-    model.traverse(function (object) {
-        if (object.isMesh){
-            object.castShadow = true;
-        }
-    });
-    scene.add(model);
-    const gltfAnimations = gltf.animations;
-    const mixer = new THREE.AnimationMixer(model);
-    const animationsMap = new Map();
-    gltfAnimations
-        .filter((a) => a.name != "TPose")
-        .forEach((a) => {
-        animationsMap.set(a.name, mixer.clipAction(a));
-    });
-    characterControls = new CharacterControls(model, mixer, animationsMap, controls, camera, "Idle", rigidBodyPlayer);
-});
-
+/*--------------Create Object-------------*/
 function createWall(x,y,z,posX,posY,posZ){
     let bGeo = new THREE.BoxGeometry(x,y,z);
     const loader = new THREE.TextureLoader();
@@ -379,22 +353,78 @@ function createWall(x,y,z,posX,posY,posZ){
 }
 
 let wall1 = createWall(0.1,40,40,20,20,0);
+createPlane();
+/*-------------------------------------*/
+
+/*--------------Load Model with Instantiate Character Controls-------------*/
+var characterControls;
+let model = new THREE.Object3D();
+var canJump = false;
+new GLTFLoader().load("./Soldier.glb", function (gltf) {
+    model = gltf.scene;
+    model.traverse(function (object) {
+        if (object.isMesh){
+            object.castShadow = true;
+        }
+    });
+    scene.add(model);
+    const gltfAnimations = gltf.animations;
+    const mixer = new THREE.AnimationMixer(model);
+    const animationsMap = new Map();
+    gltfAnimations
+        .filter((a) => a.name != "TPose")
+        .forEach((a) => {
+        animationsMap.set(a.name, mixer.clipAction(a));
+    });
+    characterControls = new CharacterControls(model, mixer, animationsMap, controls, camera, "Idle", rigidBodyPlayer);
+});
 
 let rigidPlayer = new CANNON.Box(new CANNON.Vec3(0.4,0.8,0.4));
 let rigidBodyPlayer = new CANNON.Body({shape:rigidPlayer, mass:5});
 rigidBodyPlayer.position.set(0,2,0);
 world.addBody(rigidBodyPlayer);
+
+// Jump
+var contactNormal = new CANNON.Vec3(); // Normal in the contact, pointing *out* of whatever the player touched
+var upAxis = new CANNON.Vec3(0, 1, 0);
+rigidBodyPlayer.addEventListener("collide", function (e) {
+var contact = e.contact;
+
+// contact.bi and contact.bj are the colliding bodies, and contact.ni is the collision normal.
+// We do not yet know which one is which! Let's check.
+
+if (contact.bi.id == rigidBodyPlayer.id) {
+    contact.ni.negate(contactNormal);
+} // bi is the player body, flip the contact normal
+else {
+    contactNormal.copy(contact.ni); // bi is something else. Keep the normal as it is
+}
+
+// If contactNormal.dot(upAxis) is between 0 and 1, we know that the contact normal is somewhat in the up direction.
+if (contactNormal.dot(upAxis) > 0.5) {
+    // Use a "good" threshold value between 0 and 1 here!
+    canJump = true;
+}
+});
+
 /*-------------------------------------*/
 
 /*--------------Event Control-------------*/
+var jumpVelocity = 6;
 const keysPressed = {};
 document.addEventListener("keydown", (event) => {
     // console.log(event);
     if (event.shiftKey && characterControls) {
         characterControls.switchRunToggle();
     }
-    else {
+    else if (event.keyCode != 32){
         keysPressed[event.key.toLowerCase()] = true;
+    }
+    else{
+        if (canJump === true) {
+            rigidBodyPlayer.velocity.y = jumpVelocity;
+        }
+        canJump = false;
     }
 }, false);
 

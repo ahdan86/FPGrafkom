@@ -19,7 +19,6 @@ export class CharacterControls {
         this.fadeDuration = 0.1;
         this.runVelocity = 5;
         this.walkVelocity = 2;
-        this.jumpVelocity= 2;
         this.model = model;
         this.rigidBody = rigidBody;
         this.mixer = mixer;
@@ -75,13 +74,13 @@ export class CharacterControls {
             // this.model.position.copy(this.rigidBody.position);
             this.updateCameraTarget(moveX, moveZ);
         }
-        const moveY = 15 * delta;
-        if(keysPressed[this.space]){
-            console.log("masuk");
-            console.log(moveY);
-            this.model.position.y += moveY;
-            this.rigidBody.position.y += moveY;
-        }
+        // const moveY = 15 * delta;
+        // if(keysPressed[this.space]){
+        //     console.log("masuk");
+        //     console.log(moveY);
+        //     this.model.position.y += moveY;
+        //     this.rigidBody.position.y += moveY;
+        // }
     }
     updateCameraTarget(moveX, moveZ) {
         this.camera.position.x += moveX;
