@@ -330,6 +330,7 @@ scene.add(light);
 /*-------------------------------------*/
 
 /*--------------Create Object-------------*/
+//Wall
 function createWall(x,y,z,posX,posY,posZ){
     let bGeo = new THREE.BoxGeometry(x,y,z);
     const loader = new THREE.TextureLoader();
@@ -352,8 +353,51 @@ function createWall(x,y,z,posX,posY,posZ){
     bMesh.quaternion.copy(boxBody.quaternion);
 }
 
+//Plane
 let wall1 = createWall(0.1,40,40,20,20,0);
 createPlane();
+
+//Platform
+function createPlatform(width,height,depth){
+    let platformGeo = new THREE.BoxGeometry(width,height,depth);
+    const loader = new THREE.TextureLoader();
+    const texture = loader.load("stone.jpeg");
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    texture.repeat.set(128, 128);
+    texture.magFilter = THREE.NearestFilter;
+    let platformMat = new THREE.MeshPhongMaterial({color:0xffffff, map:texture, side:THREE.DoubleSide});
+    let platformMesh = new THREE.Mesh(platformGeo, platformMat);
+    platformMesh.castShadow = true;
+    platformMesh.receiveShadow = true;
+
+    return platformMesh;
+}
+
+function bodyPlatform(bMesh,x,y,z,posX,posY,posZ){
+    let box = new CANNON.Box(new CANNON.Vec3(x/2,y/2,z/2));
+    let boxBody = new CANNON.Body({shape:box, mass:0});
+    boxBody.position.set(posX,posY,posZ);
+
+    bMesh.position.copy(boxBody.position);
+    bMesh.quaternion.copy(boxBody.quaternion);
+
+    return boxBody;
+}
+
+let platform1_x = 5;
+let platform1_y = 1;
+let platform1_z = 10;
+let pos1_x = -25;
+let pos1_y = 0;
+let pos1_z =0;
+
+let platform1 = createPlatform(platform1_x,platform1_y,platform1_z);
+let platform1Body = bodyPlatform(platform1,platform1_x,platform1_y,platform1_z,pos1_x,pos1_y,pos1_z);
+console.log("Position Platform : ", platform1.position);
+scene.add(platform1);
+world.addBody(platform1Body);
+
 /*-------------------------------------*/
 
 /*--------------Load Model with Instantiate Character Controls-------------*/
@@ -437,6 +481,7 @@ let debugRenderer = new CannonDebugRenderer(scene,world);
 
 //Main Loop
 const clock = new THREE.Clock();
+let speed1 = 0.05;
 let mainLoop = function () {
     let mixerUpdateDelta = clock.getDelta();
     let data = clock.getElapsedTime()%2;
@@ -454,6 +499,17 @@ let mainLoop = function () {
     if (characterControls) {
         characterControls.update(mixerUpdateDelta, keysPressed);
     }
+
+    //Animasi Platform1
+    if (platform1Body.position.y >= 5 || platform1Body.position.y < -1) speed1 = -speed1;
+    platform1Body.position.y +=speed1;
+    platform1.position.copy(platform1Body.position);
+
+    if(rigidBodyPlayer.position.y < -2){
+        console.log("Game Over");
+        rigidBodyPlayer.position.set(0,2,0);
+    }
+
     debugRenderer.update();
     renderer.render(scene, camera);
     requestAnimationFrame(mainLoop);
