@@ -297,22 +297,22 @@ world.gravity.set(0,-10,0);
 world.broadphase = new CANNON.NaiveBroadphase();
 let timestamp = 1.0/60.0;
 
-let rigidPlane = new CANNON.Box(new CANNON.Vec3(20,20,0.1));
+let rigidPlane = new CANNON.Box(new CANNON.Vec3(200,200,0.1));
 let planeBody = new CANNON.Body({shape:rigidPlane, mass:0});
 planeBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1,0,0), -Math.PI/2);
 planeBody.position.set(0,-0.1,0);
 world.addBody(planeBody);
 
 //Physics Test
-let bGeo = new THREE.BoxGeometry(1,1,1);
-let bMat = new THREE.MeshLambertMaterial({color:0xffffff});
-let bMesh = new THREE.Mesh(bGeo, bMat);
-scene.add(bMesh);
+// let bGeo = new THREE.BoxGeometry(1,1,1);
+// let bMat = new THREE.MeshLambertMaterial({color:0xffffff});
+// let bMesh = new THREE.Mesh(bGeo, bMat);
+// scene.add(bMesh);
 
-let box = new CANNON.Box(new CANNON.Vec3(0.5,0.5,0.5));
-let boxBody = new CANNON.Body({shape:box, mass:0});
-boxBody.position.set(0,0.2,0);
-world.addBody(boxBody);
+// let box = new CANNON.Box(new CANNON.Vec3(0.5,0.5,0.5));
+// let boxBody = new CANNON.Body({shape:box, mass:0});
+// boxBody.position.set(0,0.2,0);
+// world.addBody(boxBody);
 /*---------------------------------------------*/
 
 /*--------------Controls-----------------*/
@@ -370,10 +370,11 @@ function createBoundaryWall(x, y, z, posX, posY, posZ){
 }
 
 //Plane
-let wall1 = createBoundaryWall(2,10,40, 21, 0, 0, 0);
-let wall2 = createBoundaryWall(2,10,40, -20, 0, 0, 0);
-let wall3 = createBoundaryWall(2,10,40, 0, 0, 20, 0);
-let wall4 = createBoundaryWall(2,10,40, 0, 0, -20, 0);
+let wall1 = createBoundaryWall(1,5,40, 7.5, 2.5, 10, 0);
+let wall2 = createBoundaryWall(1,5,55, -7.5, 2.5, 17, 0);
+let wall3 = createBoundaryWall(15,5,1, 0, 2.5, -10, 0);
+let wall4 = createBoundaryWall(16,5,1, 15, 2.5, 30, 0);
+let wall5 = createBoundaryWall(30,5,1, 0, 2.5, 45, 0);
 createPlane();
 
 //Challenge
@@ -445,7 +446,7 @@ new GLTFLoader().load("./resources/Soldier.glb", function (gltf) {
 
 let rigidPlayer = new CANNON.Box(new CANNON.Vec3(0.4,0.8,0.4));
 let rigidBodyPlayer = new CANNON.Body({shape:rigidPlayer, mass:5});
-rigidBodyPlayer.position.set(15,2,15);
+rigidBodyPlayer.position.set(0,2,0);
 world.addBody(rigidBodyPlayer);
 
 // Jump
@@ -506,8 +507,8 @@ let mainLoop = function () {
     let mixerUpdateDelta = clock.getDelta();
     let data = clock.getElapsedTime()%2;
     world.step(timestamp);
-    bMesh.position.copy(boxBody.position);
-    bMesh.quaternion.copy(boxBody.quaternion);
+    // bMesh.position.copy(boxBody.position);
+    // bMesh.quaternion.copy(boxBody.quaternion);
 
     // boxBody.position.copy(model.position);
     model.position.copy(rigidBodyPlayer.position);
