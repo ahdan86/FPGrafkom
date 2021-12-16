@@ -244,7 +244,7 @@ CannonDebugRenderer.prototype = {
 let createPlane = function () {
     const planeSize = 40;
     const loader = new THREE.TextureLoader();
-    const texture = loader.load("stone.jpeg");
+    const texture = loader.load("./resources/stone.jpeg");
     texture.wrapS = THREE.RepeatWrapping;
     texture.wrapT = THREE.RepeatWrapping;
     texture.repeat.set(128, 128);
@@ -270,10 +270,20 @@ let renderer = new THREE.WebGLRenderer({
 });
 
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.shadowMap.enabled = true;
 
 let scene = new THREE.Scene();
-scene.background = new THREE.Color(0x00c5e3);
+let urls = ["./skybox/px.png", 
+            "./skybox/nx.png", 
+            "./skybox/py.png", 
+            "./skybox/ny.png", 
+            "./skybox/pz.png", 
+            "./skybox/nz.png"];
+let loader = new THREE.CubeTextureLoader();
+scene.background = loader.load(urls);
+
+
 const fov = 45;
 const aspect = window.innerWidth / window.innerHeight; // the canvas default
 const near = 0.1;
@@ -294,8 +304,6 @@ planeBody.position.set(0,-0.1,0);
 world.addBody(planeBody);
 
 //Physics Test
-
-
 let bGeo = new THREE.BoxGeometry(1,1,1);
 let bMat = new THREE.MeshLambertMaterial({color:0xffffff});
 let bMesh = new THREE.Mesh(bGeo, bMat);
@@ -310,9 +318,10 @@ world.addBody(boxBody);
 /*--------------Controls-----------------*/
 let controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
-controls.minDistance = 5;
-controls.maxDistance = 15;
+controls.minDistance = 1;
+controls.maxDistance = 4;
 controls.enablePan = false;
+// controls.enableZoom = false;
 controls.maxPolarAngle = Math.PI / 2 - 0.05;
 controls.update();
 /*---------------------------------------------*/
@@ -322,19 +331,24 @@ const color = 0xffffff;
 const intensity = 1;
 const light = new THREE.DirectionalLight(color, intensity);
 light.position.set(0,10,0);
-light.target.position.set(-5,0,0);
+light.target.position.set(-5,0,2);
 light.castShadow = true;
+scene.add(light);
 light.shadow.mapSize.width = 1024;
 light.shadow.mapSize.height = 1024;
-scene.add(light);
+light.shadow.camera.near = 0.5; 
+light.shadow.camera.far = 500;
+
+const helper = new THREE.CameraHelper( light.shadow.camera );
+scene.add( helper );
 /*-------------------------------------*/
 
 /*--------------Create Object-------------*/
 //Wall
-function createWall(x,y,z,posX,posY,posZ){
+function createBoundaryWall(x,y,z,posX,posY,posZ, quatX, quatY, quatZ, quatW){
     let bGeo = new THREE.BoxGeometry(x,y,z);
     const loader = new THREE.TextureLoader();
-    const texture = loader.load("image.png");
+    const texture = loader.load("./resources/image.png");
     texture.wrapS = THREE.RepeatWrapping;
     texture.wrapT = THREE.RepeatWrapping;
     texture.magFilter = THREE.NearestFilter;
@@ -347,26 +361,27 @@ function createWall(x,y,z,posX,posY,posZ){
     let box = new CANNON.Box(new CANNON.Vec3(x/2,y/2,z/2));
     let boxBody = new CANNON.Body({shape:box, mass:0});
     boxBody.position.set(posX,posY,posZ);
+    boxBody.quaternion.set(quatX, quatY, quatZ, quatW);
     world.addBody(boxBody);
 
     bMesh.position.copy(boxBody.position);
     bMesh.quaternion.copy(boxBody.quaternion);
+
+    return boxBody;
 }
 
 //Plane
-let wall1 = createWall(0.1,40,40,20,20,0);
+let wall1 = createBoundaryWall(2,10,40,20,0,0,0,0,0,0);
+let wall2 = createBoundaryWall(2,10,40,-20,0,0,0,0,0,0);
+let wall3 = createBoundaryWall(2,10,40, 0, 0, 20, 0, 0.7071, 0, 0.7071);
+let wall4 = createBoundaryWall(2,10,40, 0, 0, -20, 0, 0.7071, 0, 0.7071);
 createPlane();
 
-//Platform
+//Challenge
+let challengeList =[]
 function createPlatform(width,height,depth){
     let platformGeo = new THREE.BoxGeometry(width,height,depth);
-    const loader = new THREE.TextureLoader();
-    const texture = loader.load("stone.jpeg");
-    texture.wrapS = THREE.RepeatWrapping;
-    texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.set(128, 128);
-    texture.magFilter = THREE.NearestFilter;
-    let platformMat = new THREE.MeshPhongMaterial({color:0xffffff, map:texture, side:THREE.DoubleSide});
+    let platformMat = new THREE.MeshBasicMaterial({color:0xfc0f03});
     let platformMesh = new THREE.Mesh(platformGeo, platformMat);
     platformMesh.castShadow = true;
     platformMesh.receiveShadow = true;
@@ -385,18 +400,19 @@ function bodyPlatform(bMesh,x,y,z,posX,posY,posZ){
     return boxBody;
 }
 
-let platform1_x = 5;
+let platform1_x = 3;
 let platform1_y = 1;
-let platform1_z = 10;
-let pos1_x = -25;
+let platform1_z = 0.1;
+let pos1_x = 17.45;
 let pos1_y = 0;
-let pos1_z =0;
+let pos1_z =9;
 
 let platform1 = createPlatform(platform1_x,platform1_y,platform1_z);
 let platform1Body = bodyPlatform(platform1,platform1_x,platform1_y,platform1_z,pos1_x,pos1_y,pos1_z);
 console.log("Position Platform : ", platform1.position);
 scene.add(platform1);
 world.addBody(platform1Body);
+challengeList.push(platform1Body);
 
 /*-------------------------------------*/
 
@@ -404,7 +420,7 @@ world.addBody(platform1Body);
 var characterControls;
 let model = new THREE.Object3D();
 var canJump = false;
-new GLTFLoader().load("./Soldier.glb", function (gltf) {
+new GLTFLoader().load("./resources/Soldier.glb", function (gltf) {
     model = gltf.scene;
     model.traverse(function (object) {
         if (object.isMesh){
@@ -425,7 +441,7 @@ new GLTFLoader().load("./Soldier.glb", function (gltf) {
 
 let rigidPlayer = new CANNON.Box(new CANNON.Vec3(0.4,0.8,0.4));
 let rigidBodyPlayer = new CANNON.Body({shape:rigidPlayer, mass:5});
-rigidBodyPlayer.position.set(0,2,0);
+rigidBodyPlayer.position.set(15,2,15);
 world.addBody(rigidBodyPlayer);
 
 // Jump
