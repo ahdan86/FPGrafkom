@@ -345,7 +345,7 @@ scene.add( helper );
 
 /*--------------Create Object-------------*/
 //Wall
-function createBoundaryWall(x,y,z,posX,posY,posZ, quatX, quatY, quatZ, quatW){
+function createBoundaryWall(x, y, z, posX, posY, posZ, quatX, quatY, quatZ, quatW){
     let bGeo = new THREE.BoxGeometry(x,y,z);
     const loader = new THREE.TextureLoader();
     const texture = loader.load("./resources/image.png");
@@ -371,8 +371,8 @@ function createBoundaryWall(x,y,z,posX,posY,posZ, quatX, quatY, quatZ, quatW){
 }
 
 //Plane
-let wall1 = createBoundaryWall(2,10,40,20,0,0,0,0,0,0);
-let wall2 = createBoundaryWall(2,10,40,-20,0,0,0,0,0,0);
+let wall1 = createBoundaryWall(2,10,40, 21, 0, 0, 0, 0, 0, 1);
+let wall2 = createBoundaryWall(2,10,40, -20, 0, 0, 0, 0, 0, 1);
 let wall3 = createBoundaryWall(2,10,40, 0, 0, 20, 0, 0.7071, 0, 0.7071);
 let wall4 = createBoundaryWall(2,10,40, 0, 0, -20, 0, 0.7071, 0, 0.7071);
 createPlane();
@@ -394,6 +394,9 @@ function bodyPlatform(bMesh,x,y,z,posX,posY,posZ){
     let boxBody = new CANNON.Body({shape:box, mass:0});
     boxBody.position.set(posX,posY,posZ);
 
+    boxBody.collisionResponse = 0; // no impact on other bodys
+    boxBody.addEventListener("collide", function(e){ console.log("collided"); } );
+    
     bMesh.position.copy(boxBody.position);
     bMesh.quaternion.copy(boxBody.quaternion);
 
@@ -407,12 +410,12 @@ let pos1_x = 17.45;
 let pos1_y = 0;
 let pos1_z =9;
 
-let platform1 = createPlatform(platform1_x,platform1_y,platform1_z);
+let platform1 = createPlatform(platform1_x,platform1_y,platform1_z,pos1_x,pos1_y,pos1_z);
 let platform1Body = bodyPlatform(platform1,platform1_x,platform1_y,platform1_z,pos1_x,pos1_y,pos1_z);
-console.log("Position Platform : ", platform1.position);
+// console.log("Position Platform : ", platform1.position);
 scene.add(platform1);
 world.addBody(platform1Body);
-challengeList.push(platform1Body);
+challengeList.push(platform1);
 
 /*-------------------------------------*/
 
@@ -425,9 +428,11 @@ new GLTFLoader().load("./resources/Soldier.glb", function (gltf) {
     model.traverse(function (object) {
         if (object.isMesh){
             object.castShadow = true;
+            if (object.material.map) object.material.map.anisotropy = 16;
         }
     });
     scene.add(model);
+
     const gltfAnimations = gltf.animations;
     const mixer = new THREE.AnimationMixer(model);
     const animationsMap = new Map();
@@ -504,14 +509,17 @@ let mainLoop = function () {
     world.step(timestamp);
     bMesh.position.copy(boxBody.position);
     bMesh.quaternion.copy(boxBody.quaternion);
+
     // boxBody.position.copy(model.position);
     model.position.copy(rigidBodyPlayer.position);
     model.position.y = rigidBodyPlayer.position.y - 0.8;
+
+
     rigidBodyPlayer.quaternion.copy(model.quaternion);
-    if(data%2<0.1){
-        console.log('player',model.position);
-        console.log('rigid',rigidBodyPlayer.position);
-    }
+    // if(data%2<0.1){
+    //     console.log('player',model.position);
+    //     console.log('rigid',rigidBodyPlayer.position);
+    // }
     if (characterControls) {
         characterControls.update(mixerUpdateDelta, keysPressed);
     }
@@ -523,7 +531,7 @@ let mainLoop = function () {
 
     if(rigidBodyPlayer.position.y < -2){
         console.log("Game Over");
-        rigidBodyPlayer.position.set(0,2,0);
+        rigidBodyPlayer.position.set(15,2,15);
     }
 
     debugRenderer.update();
