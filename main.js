@@ -318,8 +318,8 @@ world.addBody(boxBody);
 /*--------------Controls-----------------*/
 let controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
-controls.minDistance = 1;
-controls.maxDistance = 4;
+controls.minDistance = 5;
+controls.maxDistance = 15;
 controls.enablePan = false;
 // controls.enableZoom = false;
 controls.maxPolarAngle = Math.PI / 2 - 0.05;
@@ -345,7 +345,7 @@ scene.add( helper );
 
 /*--------------Create Object-------------*/
 //Wall
-function createBoundaryWall(x, y, z, posX, posY, posZ, quatX, quatY, quatZ, quatW){
+function createBoundaryWall(x, y, z, posX, posY, posZ){
     let bGeo = new THREE.BoxGeometry(x,y,z);
     const loader = new THREE.TextureLoader();
     const texture = loader.load("./resources/image.png");
@@ -361,7 +361,6 @@ function createBoundaryWall(x, y, z, posX, posY, posZ, quatX, quatY, quatZ, quat
     let box = new CANNON.Box(new CANNON.Vec3(x/2,y/2,z/2));
     let boxBody = new CANNON.Body({shape:box, mass:0});
     boxBody.position.set(posX,posY,posZ);
-    boxBody.quaternion.set(quatX, quatY, quatZ, quatW);
     world.addBody(boxBody);
 
     bMesh.position.copy(boxBody.position);
@@ -371,10 +370,10 @@ function createBoundaryWall(x, y, z, posX, posY, posZ, quatX, quatY, quatZ, quat
 }
 
 //Plane
-let wall1 = createBoundaryWall(2,10,40, 21, 0, 0, 0, 0, 0, 1);
-let wall2 = createBoundaryWall(2,10,40, -20, 0, 0, 0, 0, 0, 1);
-let wall3 = createBoundaryWall(2,10,40, 0, 0, 20, 0, 0.7071, 0, 0.7071);
-let wall4 = createBoundaryWall(2,10,40, 0, 0, -20, 0, 0.7071, 0, 0.7071);
+let wall1 = createBoundaryWall(2,10,40, 21, 0, 0, 0);
+let wall2 = createBoundaryWall(2,10,40, -20, 0, 0, 0);
+let wall3 = createBoundaryWall(2,10,40, 0, 0, 20, 0);
+let wall4 = createBoundaryWall(2,10,40, 0, 0, -20, 0);
 createPlane();
 
 //Challenge
