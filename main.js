@@ -372,7 +372,7 @@ function createBoundaryWall(x, y, z, posX, posY, posZ){
 
 //WALL
 let wall1 = createBoundaryWall(1,5,40, 7.5, 2.5, 10);
-let wall2 = createBoundaryWall(1,5,140, -8, 2.5, 59.5);
+let wall2 = createBoundaryWall(1,5,160, -8, 2.5, 70);
 let wall3 = createBoundaryWall(140,5,1, 60.5, 2.5, -10);
 let wall4 = createBoundaryWall(20,5,1, 17, 2.5, 30);
 let wall5 = createBoundaryWall(41.5,5,1, 27.75, 2.5, 45);
@@ -382,7 +382,7 @@ let wall8 = createBoundaryWall(1,5,28, 48, 2.5, 31.5);
 let wall9 = createBoundaryWall(60,5,1, 50, 2.5, 17.5);
 let wall10 = createBoundaryWall(1,5,28.5, 80, 2.5, 3.8);
 let wall11 = createBoundaryWall(30,5,1, 45, 2.5, 66);
-let wall12 = createBoundaryWall(1,5,100, 60, 2.5, 101.25);
+let wall12 = createBoundaryWall(1,5,70, 60, 2.5, 86);
 let wall13 = createBoundaryWall(1,5,10, 60, 2.5, 35);
 let wall14 = createBoundaryWall(20,5,1, 69.5, 2.5, 40.40);
 let wall15 = createBoundaryWall(32,5,1, 75.5, 2.5, 30.60);
@@ -390,6 +390,15 @@ let wall16 = createBoundaryWall(32,5,1, 75.5, 2.5, 50.80);
 let wall17 = createBoundaryWall(1,5,33.3, 92.1, 2.5, 34.75);
 let wall18 = createBoundaryWall(37.9, 5, 1, 111.1, 2.5, 18.48);
 let wall19 = createBoundaryWall(1, 5, 140, 130.8, 2.5, 60);
+let wall20 = createBoundaryWall(45,5,1, 29.5, 2.5, 78);
+let wall21 = createBoundaryWall(60,5,1, 37.5, 2.5, 4.5);
+let wall22 = createBoundaryWall(1,5,70, 7.5, 2.5, 113);
+let wall23 = createBoundaryWall(45,5,1, 37, 2.5, 90);
+let wall24 = createBoundaryWall(45,5,1, 29.5, 2.5, 105);
+let wall25 = createBoundaryWall(45,5,1, 37, 2.5, 120);
+let wall26 = createBoundaryWall(37,5,1, 33, 2.5, 135);
+let wall27 = createBoundaryWall(90,5,1, 35, 2.5, 148);
+let wall28 = createBoundaryWall(1,5,12, 51, 2.5, 141.5);
 // let wall
 
 //Challenge
