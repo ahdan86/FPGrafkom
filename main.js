@@ -362,6 +362,7 @@ function createBoundaryWall(x, y, z, posX, posY, posZ){
     let box = new CANNON.Box(new CANNON.Vec3(x/2,y/2,z/2));
     let boxBody = new CANNON.Body({shape:box, mass:0});
     boxBody.position.set(posX,posY,posZ);
+    boxBody.collisionResponse = 0;
     world.addBody(boxBody);
 
     bMesh.position.copy(boxBody.position);
@@ -387,9 +388,9 @@ let wall13 = createBoundaryWall(1,5,10, 60, 2.5, 35);
 let wall14 = createBoundaryWall(20,5,1, 69.5, 2.5, 40.40);
 let wall15 = createBoundaryWall(32,5,1, 75.5, 2.5, 30.60);
 let wall16 = createBoundaryWall(32,5,1, 75.5, 2.5, 50.80);
-let wall17 = createBoundaryWall(1,5,33.3, 92.1, 2.5, 34.75);
-let wall18 = createBoundaryWall(37.9, 5, 1, 111.1, 2.5, 18.48);
-let wall19 = createBoundaryWall(1, 5, 140, 130.8, 2.5, 60);
+let wall17 = createBoundaryWall(1,5,47, 92.1, 2.5, 27.75);
+let wall18 = createBoundaryWall(37.9, 5, 1, 111.1, 2.5, 4.5);
+let wall19 = createBoundaryWall(1, 5, 183, 130.8, 2.5, 80);
 let wall20 = createBoundaryWall(45,5,1, 29.5, 2.5, 78);
 let wall21 = createBoundaryWall(60,5,1, 37.5, 2.5, 4.5);
 let wall22 = createBoundaryWall(1,5,70, 7.5, 2.5, 113);
@@ -399,6 +400,18 @@ let wall25 = createBoundaryWall(45,5,1, 37, 2.5, 120);
 let wall26 = createBoundaryWall(37,5,1, 33, 2.5, 135);
 let wall27 = createBoundaryWall(90,5,1, 35, 2.5, 148);
 let wall28 = createBoundaryWall(1,5,12, 51, 2.5, 141.5);
+let wall29 = createBoundaryWall(1,5,100, 80, 2.5, 120);
+let wall30 = createBoundaryWall(20,5,1, 70, 2.5, 135);
+let wall31 = createBoundaryWall(1,5,70, 95, 2.5, 103);
+let wall32 = createBoundaryWall(1,5,50, 107.1, 2.5, 42.75);
+let wall33 = createBoundaryWall(24,5,1, 106, 2.5, 67.80);
+let wall34 = createBoundaryWall(1,5,35, 117.1, 2.5, 50.75);
+let wall35 = createBoundaryWall(15, 5, 1, 123.1, 2.5, 17);
+let wall36 = createBoundaryWall(15, 5, 1, 114.5, 2.5, 25);
+let wall37 = createBoundaryWall(50,5,1, 105, 2.5, 170);
+let wall38 = createBoundaryWall(15, 5, 1, 123.1, 2.5, 148);
+let wall39 = createBoundaryWall(1,5,87, 107.1, 2.5, 127);
+let wall40 = createBoundaryWall(1,5,65, 115.1, 2.5, 115);
 // let wall
 
 //Challenge
