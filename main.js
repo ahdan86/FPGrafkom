@@ -377,7 +377,7 @@ world.addBody(planeBody);
 let controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.minDistance = 5;
-controls.maxDistance = 200;
+controls.maxDistance = 8;
 controls.enablePan = false;
 // controls.enableZoom = false;
 controls.maxPolarAngle = Math.PI / 2 - 0.05;
@@ -397,8 +397,8 @@ light.shadow.mapSize.height = 1024;
 light.shadow.camera.near = 0.5; 
 light.shadow.camera.far = 500;
 
-const helper = new THREE.CameraHelper( light.shadow.camera );
-scene.add( helper );
+// const helper = new THREE.CameraHelper( light.shadow.camera );
+// scene.add( helper );
 /*-------------------------------------*/
 
 /*--------------Create Object-------------*/
@@ -419,7 +419,7 @@ function createBoundaryWall(x, y, z, posX, posY, posZ){
     let box = new CANNON.Box(new CANNON.Vec3(x/2,y/2,z/2));
     let boxBody = new CANNON.Body({shape:box, mass:0});
     boxBody.position.set(posX,posY,posZ);
-    boxBody.collisionResponse = 0;
+    // boxBody.collisionResponse = 0;
     world.addBody(boxBody);
 
     bMesh.position.copy(boxBody.position);
@@ -533,6 +533,40 @@ function bodyPlatform(bMesh,x,y,z,posX,posY,posZ){
     return boxBody;
 }
 
+
+function finishPlatform(radius){
+    let geo = new THREE.OctahedronGeometry(radius, 0);
+    let mat = new THREE.MeshBasicMaterial({color: 0x52fc03});
+    let mesh = new THREE.Mesh(geo,mat);
+    
+    mesh.castShadow = true;
+    
+    scene.add(mesh);
+    return mesh;
+}
+
+function bodyEnd(tMesh, radius, height, radial ,posX, posY, posZ){
+    let tube = new CANNON.Cylinder(radius, radius, height, radial);
+    let tubeBody = new CANNON.Body({shape:tube, mass:0});
+    tubeBody.position.set(posX,posY,posZ);
+
+    tubeBody.collisionResponse = 0;
+    tubeBody.addEventListener("collide", function(e){ 
+        console.log("collided");
+        win(); 
+    } );
+
+    tMesh.position.copy(tubeBody.position);
+    tMesh.quaternion.copy(tubeBody.quaternion);
+
+    world.addBody(tubeBody);
+
+    return tubeBody;
+}   
+
+let finish = finishPlatform(1);
+let finishBody = bodyEnd(finish,1,1,30, 122, 2.2, 159);
+
 let platform1 = createPlatform(15,1,1);
 let platform1Body = bodyPlatform(platform1,15,1,1,0,0,48);
 
@@ -600,37 +634,37 @@ let platform22 = createPlatform(1,1,11);
 let platform22Body = bodyPlatform(platform22,1,1,11, 76, 0, 24);
 
 let platform23 = tubePlatform(1, 4, 30);
-let platform23Body = bodyTube(platform23, 10, 2, 30, 5.7, 2.2, 79.8);
+let platform23Body = bodyTube(platform23,1,4,30, 5.7, 2.2, 79.8);
 
 let platform24 = tubePlatform(1, 4, 30);
-let platform24Body = bodyTube(platform24, 10, 2, 30, -6.2, 2.2, 89.8);
+let platform24Body = bodyTube(platform24,1,4,30, -6.2, 2.2, 89.8);
 
 let platform25 = tubePlatform(1, 4, 30);
-let platform25Body = bodyTube(platform25, 10, 2, 30, 5.7, 2.2, 99.8);
+let platform25Body = bodyTube(platform25,1,4,30, 5.7, 2.2, 99.8);
 
 let platform26 = tubePlatform(1, 4, 30);
-let platform26Body = bodyTube(platform26, 10, 2, 30, -6.2, 2.2, 109.8);
+let platform26Body = bodyTube(platform26,1,4,30, -6.2, 2.2, 109.8);
 
 let platform27 = tubePlatform(1, 4, 30);
-let platform27Body = bodyTube(platform27, 10, 2, 30, 5.7, 2.2, 119.8);
+let platform27Body = bodyTube(platform27,1,4,30, 5.7, 2.2, 119.8);
 
 let platform28 = tubePlatform(1, 4, 30);
-let platform28Body = bodyTube(platform28, 10, 2, 30, -6.2, 2.2, 129.8);
+let platform28Body = bodyTube(platform28,1,4,30, -6.2, 2.2, 129.8);
 
 let platform29 = tubePlatform(1, 4, 30);
-let platform29Body = bodyTube(platform29, 10, 2, 30, 78.1, 2.2, 79.8);
+let platform29Body = bodyTube(platform29,1,4,30, 78.1, 2.2, 79.8);
 
 let platform30 = tubePlatform(1, 4, 30);
-let platform30Body = bodyTube(platform30, 10, 2, 30, 61.5, 2.2, 89.8);
+let platform30Body = bodyTube(platform30,1,4,30, 61.5, 2.2, 89.8);
 
 let platform31 = tubePlatform(1, 4, 30);
-let platform31Body = bodyTube(platform31, 10, 2, 30, 78.1, 2.2, 99.8);
+let platform31Body = bodyTube(platform31,1,4,30, 78.1, 2.2, 99.8);
 
 let platform32 = tubePlatform(1, 4, 30);
-let platform32Body = bodyTube(platform32, 10, 2, 30, 61.5, 2.2, 109.8);
+let platform32Body = bodyTube(platform32,1,4,30, 61.5, 2.2, 109.8);
 
 let platform33 = tubePlatform(1, 4, 30);
-let platform33Body = bodyTube(platform33, 10, 2, 30, 78.1, 2.2, 119.8);
+let platform33Body = bodyTube(platform33,1,4,30, 78.1, 2.2, 119.8);
 
 let platform34 = createPlatform(1, 4, 10);
 let platform34Body = bodyPlatform(platform34, 1, 4, 10, 49, 2, 84);
@@ -744,18 +778,18 @@ document.addEventListener("keyup", (event) => {
 const clock = new THREE.Clock();
 
 // Challenge1 (depan spawn)
-let speed1 = 0.05;
-let speed2 = -0.07;
-let speed3 = 0.09;
-let speed4 = -0.21;
+let speed1 = 0.02;
+let speed2 = -0.03;
+let speed3 = 0.05;
+let speed4 = -0.07;
 
 // Challenge 2 Tingkat
-let speed7 = 0.15;
-let speed8 = -0.15;
-let speed9 = 0.15;
-let speed10 = -0.15;
-let speed11 = 0.2;
-let speed12 = 0.2;
+let speed7 = 0.07;
+let speed8 = -0.07;
+let speed9 = 0.07;
+let speed10 = -0.07;
+let speed11 = 0.12;
+let speed12 = 0.12;
 
 // Mirip Challenge1 (tengah)
 let speed15 = 0.05;
@@ -769,12 +803,12 @@ let speed21 = -0.16;
 let speed22 = 0.2; 
 
 //Challenge cylinder bawah sendiri
-let speed23 = 0.1;
-let speed24 = -0.1;
-let speed25 = 0.1;
-let speed26 = -0.2;
-let speed27 = 0.2;
-let speed28 = -0.2;
+let speed23 = 0.05;
+let speed24 = -0.05;
+let speed25 = 0.05;
+let speed26 = -0.08;
+let speed27 = 0.08;
+let speed28 = -0.08;
 let mainLoop = function () {
     let mixerUpdateDelta = clock.getDelta();
     let data = clock.getElapsedTime()%2;
@@ -813,10 +847,10 @@ let mainLoop = function () {
     platform4Body.position.y +=speed4;
     platform4.position.copy(platform4Body.position);
 
-    platform5.rotation.y += 0.013;
+    platform5.rotation.y += 0.008;
     platform5Body.quaternion.copy(platform5.quaternion);
 
-    platform6.rotation.y += 0.013;
+    platform6.rotation.y += 0.008;
     platform6Body.quaternion.copy(platform6.quaternion);
 
     if (platform7Body.position.x >= 45.2 || platform7Body.position.x < 25.2) speed7 = -speed7;
@@ -848,10 +882,10 @@ let mainLoop = function () {
         rigidBodyPlayer.position.set(0,2,0);
     }
 
-    platform13.rotation.y += 0.02;
+    platform13.rotation.y += 0.008;
     platform13Body.quaternion.copy(platform13.quaternion);
 
-    platform14.rotation.y += 0.02;
+    platform14.rotation.y += 0.008;
     platform14Body.quaternion.copy(platform14.quaternion);
 
     if (platform15Body.position.y >= 5 || platform15Body.position.y < -1) speed15 = -speed15;
@@ -910,29 +944,32 @@ let mainLoop = function () {
     if(platform28Body.position.x <= -6.3 || platform28Body.position.x > 5.8) speed28 = -speed28;
     moveCylinder(platform28Body.position, platform28.position, speed28);
 
-    platform34.rotation.y += 0.016;
+    platform34.rotation.y += 0.01;
     platform34Body.quaternion.copy(platform34.quaternion);
 
-    platform35.rotation.y += 0.016;
+    platform35.rotation.y += 0.01;
     platform35Body.quaternion.copy(platform35.quaternion);
 
-    platform36.rotation.y += -0.016;
+    platform36.rotation.y += -0.01;
     platform36Body.quaternion.copy(platform36.quaternion);
 
-    platform37.rotation.y += -0.016;
+    platform37.rotation.y += -0.01;
     platform37Body.quaternion.copy(platform37.quaternion);
 
-    platform38.rotation.y += 0.016;
+    platform38.rotation.y += 0.01;
     platform38Body.quaternion.copy(platform38.quaternion);
 
-    platform39.rotation.y += 0.016;
+    platform39.rotation.y += 0.01;
     platform39Body.quaternion.copy(platform39.quaternion);
 
-    platform40.rotation.y += -0.016;
+    platform40.rotation.y += -0.01;
     platform40Body.quaternion.copy(platform40.quaternion);
 
-    platform41.rotation.y += -0.016;
+    platform41.rotation.y += -0.01;
     platform41Body.quaternion.copy(platform41.quaternion);
+
+    //finish platform animate
+    finish.rotation.y += 0.016;
 
     // debugRenderer.update();
     renderer.render(scene, camera);
