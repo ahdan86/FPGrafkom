@@ -450,16 +450,106 @@ let platform3 = createPlatform(15,1,1,0,0,58);
 let platform3Body = bodyPlatform(platform3,15,1,1,0,0,58);
 
 let platform4 = createPlatform(15,1,1,0,0,63);
-let platform4Body = bodyPlatform(platform3,15,1,1,0,0,63);
+let platform4Body = bodyPlatform(platform4,15,1,1,0,0,63);
+
+let platform5 = createPlatform(20,4,1, 37.5, 2, 30);
+let platform5Body = bodyPlatform(platform5,20,4,1, 37.5, 2.1, 30);
+
+let platform6 = createPlatform(1,4,22.3, 37.5, 2, 30);
+let platform6Body = bodyPlatform(platform6,1,4,22.3, 37.5, 2, 30);
+
+let platform7 = createPlatform(1, 1,10.3, 25.2, 0.5, 10.9);
+let platform7Body = bodyPlatform(platform7,1,1,10.3, 25.2, 0.5, 10.9);
+
+let platform8 = createPlatform(1, 1,10.3, 65.2, 0.5, 10.9);
+let platform8Body = bodyPlatform(platform8,1,1,10.3, 65.2, 0.5, 10.9);
+
+let platform9 = createPlatform(1, 1,10.3, 25.2, 0.5, -2.7);
+let platform9Body = bodyPlatform(platform9,1,1,10.3, 25.2, 0.5, -2.7);
+
+let platform10 = createPlatform(1, 1,10.3, 65.2, 0.5, -2.7);
+let platform10Body = bodyPlatform(platform10,1,1,10.3, 65.2, 0.5, -2.7);
+
+let platform11 = createPlatform(1, 1,10.3, 25.2, 1.7, 10.9);
+let platform11Body = bodyPlatform(platform11, 1, 1,10.3, 25.2, 1.7, 10.9);
+
+let platform12 = createPlatform(1, 1,10.3, 25.2, 1.7, -2.7);
+let platform12Body = bodyPlatform(platform12, 1, 1,10.3, 25.2, 1.7, -2.7);
+
+let platform13 = createPlatform(1,4,18.5, 48.3, 2, 55.14);
+let platform13Body = bodyPlatform(platform13, 1,4,18.5, 48.3, 2, 55.14);
+
+let platform14 = createPlatform(18.5,4,1, 48.3, 2, 55.14);
+let platform14Body = bodyPlatform(platform14, 18.5,4,1, 48.3, 2, 55.14);
+
+let platform15 = createPlatform(10,1,1, 54.2, 0, 39.42);
+let platform15Body = bodyPlatform(platform15,10,1,1, 54.2, 0, 39.42);
+
+let platform16 = createPlatform(10,1,1, 54.2, 0, 35.42);
+let platform16Body = bodyPlatform(platform16,10,1,1, 54.2, 0, 35.42);
+
+let platform17 = createPlatform(10,1,1, 54.2, 0, 31.42);
+let platform17Body = bodyPlatform(platform17,10,1,1, 54.2, 0, 31.42);
+
+let platform18 = createPlatform(1,1,11, 60, 0, 24);
+let platform18Body = bodyPlatform(platform18,1,1,11, 60, 0, 24);
+
+let platform19 = createPlatform(1,1,11, 64, 0, 24);
+let platform19Body = bodyPlatform(platform19,1,1,11, 64, 0, 24);
+
+let platform20 = createPlatform(1,1,11, 68, 0, 24);
+let platform20Body = bodyPlatform(platform20,1,1,11, 68, 0, 24);
+
+let platform21 = createPlatform(1,1,11, 72, 0, 24);
+let platform21Body = bodyPlatform(platform21,1,1,11, 72, 0, 24);
+
+let platform22 = createPlatform(1,1,11, 76, 0, 24);
+let platform22Body = bodyPlatform(platform22,1,1,11, 76, 0, 24);
 
 scene.add(platform1);
 scene.add(platform2);
 scene.add(platform3);
 scene.add(platform4);
+scene.add(platform5);
+scene.add(platform6);
+scene.add(platform7);
+scene.add(platform8);
+scene.add(platform9);
+scene.add(platform10);
+scene.add(platform11);
+scene.add(platform12);
+scene.add(platform13);
+scene.add(platform14);
+scene.add(platform15);
+scene.add(platform16);
+scene.add(platform17);
+scene.add(platform18);
+scene.add(platform19);
+scene.add(platform20);
+scene.add(platform21);
+scene.add(platform22);
 world.addBody(platform1Body);
 world.addBody(platform2Body);
 world.addBody(platform3Body);
 world.addBody(platform4Body);
+world.addBody(platform5Body);
+world.addBody(platform6Body);
+world.addBody(platform7Body);
+world.addBody(platform8Body);
+world.addBody(platform9Body);
+world.addBody(platform10Body);
+world.addBody(platform11Body);
+world.addBody(platform12Body);
+world.addBody(platform13Body);
+world.addBody(platform14Body);
+world.addBody(platform15Body);
+world.addBody(platform16Body);
+world.addBody(platform17Body);
+world.addBody(platform18Body);
+world.addBody(platform19Body);
+world.addBody(platform20Body);
+world.addBody(platform21Body);
+world.addBody(platform22Body);
 
 /*-------------------------------------*/
 
@@ -549,7 +639,21 @@ const clock = new THREE.Clock();
 let speed1 = 0.05;
 let speed2 = -0.07;
 let speed3 = 0.09;
-let speed4 = -0.11;
+let speed4 = -0.21;
+let speed7 = 0.15;
+let speed8 = -0.15;
+let speed9 = 0.15;
+let speed10 = -0.15;
+let speed11 = 0.2;
+let speed12 = 0.2;
+let speed15 = 0.05;
+let speed16 = -0.07;
+let speed17 = 0.09;
+let speed18 = 0.1;
+let speed19 = -0.12;
+let speed20 = 0.14;
+let speed21 = -0.16;
+let speed22 = 0.2; 
 let mainLoop = function () {
     let mixerUpdateDelta = clock.getDelta();
     let data = clock.getElapsedTime()%2;
@@ -588,10 +692,78 @@ let mainLoop = function () {
     platform4Body.position.y +=speed4;
     platform4.position.copy(platform4Body.position);
 
+    platform5.rotation.y += 0.02;
+    platform5Body.quaternion.copy(platform5.quaternion);
+
+    platform6.rotation.y += 0.02;
+    platform6Body.quaternion.copy(platform6.quaternion);
+
+    if (platform7Body.position.x >= 45.2 || platform7Body.position.x < 25.2) speed7 = -speed7;
+    platform7Body.position.x += speed7;
+    platform7.position.copy(platform7Body.position);
+
+    if (platform8Body.position.x <= 45.2|| platform8Body.position.x > 65.2) speed8 = -speed8;
+    platform8Body.position.x += speed8;
+    platform8.position.copy(platform8Body.position);
+
+    if (platform9Body.position.x >= 45.2 || platform9Body.position.x < 25.2) speed9 = -speed9;
+    platform9Body.position.x += speed9;
+    platform9.position.copy(platform9Body.position);
+
+    if (platform10Body.position.x <= 45.2|| platform10Body.position.x > 65.2) speed10 = -speed10;
+    platform10Body.position.x += speed10;
+    platform10.position.copy(platform10Body.position);
+
+    if (platform11Body.position.x >= 65.2 || platform11Body.position.x < 25.2) speed11 = -speed11;
+    platform11Body.position.x += speed11;
+    platform11.position.copy(platform11Body.position);
+
+    if (platform11Body.position.x >= 65.2 || platform11Body.position.x < 25.2) speed12 = -speed12;
+    platform12Body.position.x += speed12;
+    platform12.position.copy(platform12Body.position);
+
     if(rigidBodyPlayer.position.y < -2){
         console.log("Game Over");
         rigidBodyPlayer.position.set(0,2,0);
     }
+
+    platform13.rotation.y += 0.02;
+    platform13Body.quaternion.copy(platform13.quaternion);
+
+    platform14.rotation.y += 0.02;
+    platform14Body.quaternion.copy(platform14.quaternion);
+
+    if (platform15Body.position.y >= 5 || platform15Body.position.y < -1) speed15 = -speed15;
+    platform15Body.position.y +=speed15;
+    platform15.position.copy(platform15Body.position);
+
+    if (platform16Body.position.y >= 5 || platform16Body.position.y < -1) speed16 = -speed16;
+    platform16Body.position.y +=speed16;
+    platform16.position.copy(platform16Body.position);
+
+    if (platform17Body.position.y >= 5 || platform17Body.position.y < -1) speed17 = -speed17;
+    platform17Body.position.y +=speed17;
+    platform17.position.copy(platform17Body.position);
+
+    if(platform18Body.position.y >= 5 || platform18Body.position.y < -1) speed18 = -speed18;
+    platform18Body.position.y +=speed18;
+    platform18.position.copy(platform18Body.position);
+
+    if(platform19Body.position.y >= 5 || platform19Body.position.y < -1) speed19 = -speed19;
+    platform19Body.position.y +=speed19;
+    platform19.position.copy(platform19Body.position);
+
+    if(platform20Body.position.y >= 5 || platform20Body.position.y < -1) speed20 = -speed20;
+    platform20Body.position.y +=speed20;
+    platform20.position.copy(platform20Body.position);
+
+    if(platform21Body.position.y >= 5 || platform21Body.position.y < -1) speed21 = -speed21;
+    platform21Body.position.y +=speed21;
+    platform21.position.copy(platform21Body.position);
+
+    if(platform22Body.position.y >= 5 || platform22Body.position.y < -1) speed22 = -speed22;
+    platform22Body.position.y +=speed22;
+    platform22.position.copy(platform22Body.position);
 
     debugRenderer.update();
     renderer.render(scene, camera);
