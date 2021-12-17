@@ -483,7 +483,7 @@ let platform4 = createPlatform(15,1,1);
 let platform4Body = bodyPlatform(platform4,15,1,1,0,0,63);
 
 let platform5 = createPlatform(20,4,1);
-let platform5Body = bodyPlatform(platform5,20,4,1, 37.5, 2.1, 30);
+let platform5Body = bodyPlatform(platform5,20,4,1, 37.5, 2, 30);
 
 let platform6 = createPlatform(1,4,22.3);
 let platform6Body = bodyPlatform(platform6,1,4,22.3, 37.5, 2, 30);
@@ -553,6 +553,45 @@ let platform27Body = bodyTube(platform27, 10, 2, 30, 5.7, 2.2, 119.8);
 
 let platform28 = tubePlatform(1, 4, 30);
 let platform28Body = bodyTube(platform28, 10, 2, 30, -6.2, 2.2, 129.8);
+
+let platform29 = tubePlatform(1, 4, 30);
+let platform29Body = bodyTube(platform29, 10, 2, 30, 78.1, 2.2, 79.8);
+
+let platform30 = tubePlatform(1, 4, 30);
+let platform30Body = bodyTube(platform30, 10, 2, 30, 61.5, 2.2, 89.8);
+
+let platform31 = tubePlatform(1, 4, 30);
+let platform31Body = bodyTube(platform31, 10, 2, 30, 78.1, 2.2, 99.8);
+
+let platform32 = tubePlatform(1, 4, 30);
+let platform32Body = bodyTube(platform32, 10, 2, 30, 61.5, 2.2, 109.8);
+
+let platform33 = tubePlatform(1, 4, 30);
+let platform33Body = bodyTube(platform33, 10, 2, 30, 78.1, 2.2, 119.8);
+
+let platform34 = createPlatform(1, 4, 10);
+let platform34Body = bodyPlatform(platform34, 1, 4, 10, 49, 2, 84);
+
+let platform35 = createPlatform(10, 4, 1);
+let platform35Body = bodyPlatform(platform35, 9, 4, 1, 49, 2, 84);
+
+let platform36 = createPlatform(1, 4, 10);
+let platform36Body = bodyPlatform(platform36, 1, 4, 10, 19.3, 2, 84);
+
+let platform37 = createPlatform(10, 4, 1);
+let platform37Body = bodyPlatform(platform37, 10, 4, 1, 19.3, 2, 84);
+
+let platform38 = createPlatform(12, 4, 1);
+let platform38Body = bodyPlatform(platform38, 12, 4, 1, 19.3, 2, 98);
+
+let platform39 = createPlatform(1, 4, 12);
+let platform39Body = bodyPlatform(platform39, 1, 4, 12, 19.3, 2, 98);
+
+let platform40 = createPlatform(12, 4, 1);
+let platform40Body = bodyPlatform(platform40, 12, 4, 1, 49, 2, 98);
+
+let platform41 = createPlatform(1, 4, 12);
+let platform41Body = bodyPlatform(platform41, 1, 4, 12, 49.3, 2, 98);
 
 
 /*-------------------------------------*/
@@ -807,6 +846,30 @@ let mainLoop = function () {
 
     if(platform28Body.position.x <= -6.3 || platform28Body.position.x > 5.8) speed28 = -speed28;
     moveCylinder(platform28Body.position, platform28.position, speed28);
+
+    platform34.rotation.y += 0.016;
+    platform34Body.quaternion.copy(platform34.quaternion);
+
+    platform35.rotation.y += 0.016;
+    platform35Body.quaternion.copy(platform35.quaternion);
+
+    platform36.rotation.y += -0.016;
+    platform36Body.quaternion.copy(platform36.quaternion);
+
+    platform37.rotation.y += -0.016;
+    platform37Body.quaternion.copy(platform37.quaternion);
+
+    platform38.rotation.y += 0.016;
+    platform38Body.quaternion.copy(platform38.quaternion);
+
+    platform39.rotation.y += 0.016;
+    platform39Body.quaternion.copy(platform39.quaternion);
+
+    platform40.rotation.y += -0.016;
+    platform40Body.quaternion.copy(platform40.quaternion);
+
+    platform41.rotation.y += -0.016;
+    platform41Body.quaternion.copy(platform41.quaternion);
 
     // debugRenderer.update();
     renderer.render(scene, camera);

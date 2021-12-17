@@ -17,7 +17,7 @@ export class CharacterControls {
         this.rotateQuaternion = new THREE.Quaternion();
         this.cameraTarget = new THREE.Vector3();
         this.fadeDuration = 0.1;
-        this.runVelocity = 30;
+        this.runVelocity = 8;
         this.walkVelocity = 4;
         this.model = model;
         this.rigidBody = rigidBody;
@@ -73,7 +73,7 @@ export class CharacterControls {
             this.rigidBody.position.z += moveZ;
             // this.model.position.copy(this.rigidBody.position);
             this.updateCameraTarget(moveX, moveZ);
-            // console.log("pos : ", this.rigidBody.position);
+            console.log("pos : ", this.rigidBody.position);
         }
         // const moveY = 15 * delta;
         // if(keysPressed[this.space]){
