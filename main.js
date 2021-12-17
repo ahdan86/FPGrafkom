@@ -242,7 +242,7 @@ CannonDebugRenderer.prototype = {
 };
 
 let createPlane = function () {
-    const planeSize = 40;
+    const planeSize = 100;
     const loader = new THREE.TextureLoader();
     const texture = loader.load("./resources/stone.jpeg");
     texture.wrapS = THREE.RepeatWrapping;
@@ -291,13 +291,14 @@ const far = 1000;
 let camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
 camera.position.set(5, 5, 0);
 
-/*--------------Physics Engine-----------------*/
+/*--------------Physics Engine + Plane-----------------*/
 let world = new CANNON.World();
 world.gravity.set(0,-10,0);
 world.broadphase = new CANNON.NaiveBroadphase();
 let timestamp = 1.0/60.0;
 
-let rigidPlane = new CANNON.Box(new CANNON.Vec3(200,200,0.1));
+createPlane();
+let rigidPlane = new CANNON.Box(new CANNON.Vec3(100,100,0.1));
 let planeBody = new CANNON.Body({shape:rigidPlane, mass:0});
 planeBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1,0,0), -Math.PI/2);
 planeBody.position.set(0,-0.1,0);
@@ -319,7 +320,7 @@ world.addBody(planeBody);
 let controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.minDistance = 5;
-controls.maxDistance = 15;
+controls.maxDistance = 50;
 controls.enablePan = false;
 // controls.enableZoom = false;
 controls.maxPolarAngle = Math.PI / 2 - 0.05;
@@ -348,7 +349,7 @@ scene.add( helper );
 function createBoundaryWall(x, y, z, posX, posY, posZ){
     let bGeo = new THREE.BoxGeometry(x,y,z);
     const loader = new THREE.TextureLoader();
-    const texture = loader.load("./resources/image.png");
+    const texture = loader.load("./resources/stone.jpeg");
     texture.wrapS = THREE.RepeatWrapping;
     texture.wrapT = THREE.RepeatWrapping;
     texture.magFilter = THREE.NearestFilter;
@@ -369,13 +370,13 @@ function createBoundaryWall(x, y, z, posX, posY, posZ){
     return boxBody;
 }
 
-//Plane
-let wall1 = createBoundaryWall(1,5,40, 7.5, 2.5, 10, 0);
-let wall2 = createBoundaryWall(1,5,55, -7.5, 2.5, 17, 0);
-let wall3 = createBoundaryWall(15,5,1, 0, 2.5, -10, 0);
-let wall4 = createBoundaryWall(16,5,1, 15, 2.5, 30, 0);
-let wall5 = createBoundaryWall(30,5,1, 0, 2.5, 45, 0);
-createPlane();
+//WALL
+let wall1 = createBoundaryWall(1,5,40, 7.5, 2.5, 10);
+let wall2 = createBoundaryWall(1,5,100, -8, 2.5, 39.5);
+let wall3 = createBoundaryWall(15,5,1, 0, 2.5, -10);
+let wall4 = createBoundaryWall(16,5,1, 15, 2.5, 30);
+let wall5 = createBoundaryWall(30,5,1, 22, 2.5, 45);
+let wall6 = createBoundaryWall(1,5,30, 7.5, 2.5, 59.5);
 
 //Challenge
 let challengeList =[]
@@ -403,12 +404,12 @@ function bodyPlatform(bMesh,x,y,z,posX,posY,posZ){
     return boxBody;
 }
 
-let platform1_x = 3;
+let platform1_x = 15;
 let platform1_y = 1;
-let platform1_z = 0.1;
-let pos1_x = 17.45;
+let platform1_z = 1;
+let pos1_x = 0;
 let pos1_y = 0;
-let pos1_z =9;
+let pos1_z = 50;
 
 let platform1 = createPlatform(platform1_x,platform1_y,platform1_z,pos1_x,pos1_y,pos1_z);
 let platform1Body = bodyPlatform(platform1,platform1_x,platform1_y,platform1_z,pos1_x,pos1_y,pos1_z);
@@ -531,7 +532,7 @@ let mainLoop = function () {
 
     if(rigidBodyPlayer.position.y < -2){
         console.log("Game Over");
-        rigidBodyPlayer.position.set(15,2,15);
+        rigidBodyPlayer.position.set(0,2,0);
     }
 
     debugRenderer.update();
