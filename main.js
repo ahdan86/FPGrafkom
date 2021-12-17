@@ -241,6 +241,64 @@ CannonDebugRenderer.prototype = {
     }
 };
 
+let canvas = document.getElementById("myCanvas");
+let mainMenuElement = document.getElementById("mainMenu");
+let gameOverMenu = document.getElementById("gameOverMenu");
+let winMenu = document.getElementById("winMenu");
+
+document.getElementById("start").addEventListener("click", function(e){
+    e.preventDefault();
+    document.body.appendChild(renderer.domElement);
+    mainLoop();
+    hideMainMenu();
+    canvas.style.display = "block";
+    return;
+})
+
+document.getElementById("retry").addEventListener("click", function(e){
+    e.preventDefault();
+    rigidBodyPlayer.position.set(0,2,0);
+    model.position.copy(rigidBodyPlayer.position);
+    model.position.y = rigidBodyPlayer.position.y - 0.8;
+    camera.position.set(5, 5, 0);
+    gameOverMenu.classList.remove("d-flex");
+    gameOverMenu.classList.add("d-none");
+    canvas.style.display = "block";
+})
+
+document.getElementById("again").addEventListener("click", function(e){
+    e.preventDefault();
+    rigidBodyPlayer.position.set(0,2,0);
+    model.position.copy(rigidBodyPlayer.position);
+    model.position.y = rigidBodyPlayer.position.y - 0.8;
+    camera.position.set(5, 5, 0);
+    winMenu.classList.remove("d-flex");
+    winMenu.classList.add("d-none");
+    canvas.style.display = "block";
+})
+
+function hideMainMenu(){
+    if(mainMenuElement) mainMenuElement.style.display = "none"; 
+}
+
+function gameOver(){
+    canvas.style.display = "none";
+    gameOverMenu.classList.remove("d-none");
+    gameOverMenu.classList.add("d-flex");
+    gameOverMenu.classList.add("flex-column");
+    gameOverMenu.classList.add("justify-content-center");
+    localStorage.clear();
+}
+
+function win(){
+    canvas.style.display = "none";
+    winMenu.classList.remove("d-none");
+    winMenu.classList.add("d-flex");
+    winMenu.classList.add("flex-column");
+    winMenu.classList.add("justify-content-center");
+    localStorage.clear();
+}
+
 let createPlane = function () {
     const planeSize = 400;
     const loader = new THREE.TextureLoader();
@@ -262,7 +320,6 @@ let createPlane = function () {
     plane.receiveShadow = true;
     scene.add(plane);
 };
-let canvas = document.getElementById("myCanvas");
 
 let renderer = new THREE.WebGLRenderer({
     antialias: true,
@@ -444,7 +501,10 @@ function bodyTube(tMesh, radius, height, radial ,posX, posY, posZ){
     tubeBody.position.set(posX,posY,posZ);
 
     tubeBody.collisionResponse = 0;
-    tubeBody.addEventListener("collide", function(e){ console.log("collided"); } );
+    tubeBody.addEventListener("collide", function(e){ 
+        console.log("collided");
+        gameOver(); 
+    } );
 
     tMesh.position.copy(tubeBody.position);
     tMesh.quaternion.copy(tubeBody.quaternion);
@@ -460,7 +520,10 @@ function bodyPlatform(bMesh,x,y,z,posX,posY,posZ){
     boxBody.position.set(posX,posY,posZ);
 
     boxBody.collisionResponse = 0; // no impact on other bodys
-    boxBody.addEventListener("collide", function(e){ console.log("collided"); } );
+    boxBody.addEventListener("collide", function(e){ 
+        console.log("collided");
+        gameOver(); 
+    } );
     
     bMesh.position.copy(boxBody.position);
     bMesh.quaternion.copy(boxBody.quaternion);

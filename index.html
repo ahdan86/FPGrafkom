@@ -7,10 +7,100 @@
         <title>FP Grafkom</title>
         <!-- <script src="node_modules\three\build\three.js"></script> -->
         <script src="node_modules\cannon\build\cannon.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
         <!-- <script src="node_modules\cannon\tools\threejs\CannonDebugRenderer.js" type="module"></script> -->
+        <style>
+            *{
+                margin: 0;
+            }
+        </style>
     </head>
-    <body>
-        <canvas id="myCanvas"></canvas>
+    <body style="background-color: black;">
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">How To Play</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  1. Use W,A,S,D to Move <br>
+                  2. Use Mouse Drag to Move the Camera <br>
+                  3. Use Space to Jump <br>
+                  4. Use Shift to Toogle Run <br>
+                  5. Avoid the Obstacle and Find the Finish Line
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        <div class="container" id="mainMenu">
+            <div class="row" >
+                    <div class="col-12 d-flex justify-content-center">
+                        <!-- Labyrinth Halo -->
+                        <img src="./resources/Logo.png" alt="Logo" style="height: 600px;">
+                    </div>
+              <div class="col-6 d-flex justify-content-center">
+                    <div>
+                        <div id="start">
+                            <button class="btn mb-3" style="width: 10rem; height: 5rem; font-size: 30px; background-color: rgb(168, 161, 161); color: white;">Play</button>
+                        </div>
+                        <div>
+                            <button class="btn" style="width: 10rem; height: 5rem; font-size: 23px; background-color: rgb(168, 161, 161); color: white;" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                How To Play
+                            </button>
+                        </div>
+                    </div>
+              </div>
+              <div class="col-6 d-flex justify-content-center">
+                <div class="container">
+                    <div class="row" style="font-size: x-large; color: white;">
+                        <div class="col-6">
+                            Presented By :
+                            <br> 1. Yusril Zubaydi
+                            <br> 2. Ahdan Amanullah I. M.
+                            <br> 3. Afifan Syafaqi Yahya
+                        </div>
+                        <div class="col-6">
+                            <br> 05111940000160
+                            <br> 05111940000197
+                            <br> 05111940000234
+                        </div>
+                    </div>
+
+                </div>
+              </div>
+        </div>
+        </div>
+
+        <div class="d-none" id="gameOverMenu">
+                <div class="mx-auto" style="font-size: 100px; color: red;">
+                    GAME OVER
+                </div>
+                <div class="mx-auto" id="retry">
+                    <button class="btn btn-primary mb-3" style="width: 10rem; height: 5rem; font-size: 30px;">
+                        Retry
+                    </button>
+                </div>
+        </div>
+
+        <div class="d-none" id="winMenu">
+            <div class="mx-auto" style="font-size: 100px; color: rgb(77, 237, 48);">
+                MISSION FAILED SUCCESSFULLY
+            </div>
+            <div class="mx-auto" id="again">
+                <button class="btn btn-primary mb-3" style="width: 15rem; height: 7.5rem; font-size: 30px;">
+                    Wanna Try Again ?
+                </button>
+            </div>
+    </div>
+
+        <canvas id="myCanvas" style="display: none;"></canvas>
         <script src="main.js" type="module"></script>
     </body>
 </html>
