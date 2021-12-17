@@ -242,7 +242,7 @@ CannonDebugRenderer.prototype = {
 };
 
 let createPlane = function () {
-    const planeSize = 100;
+    const planeSize = 400;
     const loader = new THREE.TextureLoader();
     const texture = loader.load("./resources/stone.jpeg");
     texture.wrapS = THREE.RepeatWrapping;
@@ -298,7 +298,7 @@ world.broadphase = new CANNON.NaiveBroadphase();
 let timestamp = 1.0/60.0;
 
 createPlane();
-let rigidPlane = new CANNON.Box(new CANNON.Vec3(100,100,0.1));
+let rigidPlane = new CANNON.Box(new CANNON.Vec3(200,200,0.1));
 let planeBody = new CANNON.Body({shape:rigidPlane, mass:0});
 planeBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1,0,0), -Math.PI/2);
 planeBody.position.set(0,-0.1,0);
@@ -320,7 +320,7 @@ world.addBody(planeBody);
 let controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.minDistance = 5;
-controls.maxDistance = 50;
+controls.maxDistance = 200;
 controls.enablePan = false;
 // controls.enableZoom = false;
 controls.maxPolarAngle = Math.PI / 2 - 0.05;
@@ -372,11 +372,25 @@ function createBoundaryWall(x, y, z, posX, posY, posZ){
 
 //WALL
 let wall1 = createBoundaryWall(1,5,40, 7.5, 2.5, 10);
-let wall2 = createBoundaryWall(1,5,100, -8, 2.5, 39.5);
-let wall3 = createBoundaryWall(15,5,1, 0, 2.5, -10);
-let wall4 = createBoundaryWall(16,5,1, 15, 2.5, 30);
-let wall5 = createBoundaryWall(30,5,1, 22, 2.5, 45);
-let wall6 = createBoundaryWall(1,5,30, 7.5, 2.5, 59.5);
+let wall2 = createBoundaryWall(1,5,140, -8, 2.5, 59.5);
+let wall3 = createBoundaryWall(140,5,1, 60.5, 2.5, -10);
+let wall4 = createBoundaryWall(20,5,1, 17, 2.5, 30);
+let wall5 = createBoundaryWall(41.5,5,1, 27.75, 2.5, 45);
+let wall6 = createBoundaryWall(1,5,20, 7.5, 2.5, 55.5);
+let wall7 = createBoundaryWall(10,5,1, 12, 2.5, 66);
+let wall8 = createBoundaryWall(1,5,28, 48, 2.5, 31.5);
+let wall9 = createBoundaryWall(60,5,1, 50, 2.5, 17.5);
+let wall10 = createBoundaryWall(1,5,28.5, 80, 2.5, 3.8);
+let wall11 = createBoundaryWall(30,5,1, 45, 2.5, 66);
+let wall12 = createBoundaryWall(1,5,100, 60, 2.5, 101.25);
+let wall13 = createBoundaryWall(1,5,10, 60, 2.5, 35);
+let wall14 = createBoundaryWall(20,5,1, 69.5, 2.5, 40.40);
+let wall15 = createBoundaryWall(32,5,1, 75.5, 2.5, 30.60);
+let wall16 = createBoundaryWall(32,5,1, 75.5, 2.5, 50.80);
+let wall17 = createBoundaryWall(1,5,33.3, 92.1, 2.5, 34.75);
+let wall18 = createBoundaryWall(37.9, 5, 1, 111.1, 2.5, 18.48);
+let wall19 = createBoundaryWall(1, 5, 140, 130.8, 2.5, 60);
+// let wall
 
 //Challenge
 let challengeList =[]
@@ -404,19 +418,26 @@ function bodyPlatform(bMesh,x,y,z,posX,posY,posZ){
     return boxBody;
 }
 
-let platform1_x = 15;
-let platform1_y = 1;
-let platform1_z = 1;
-let pos1_x = 0;
-let pos1_y = 0;
-let pos1_z = 50;
+let platform1 = createPlatform(15,1,1,0,0,48);
+let platform1Body = bodyPlatform(platform1,15,1,1,0,0,48);
 
-let platform1 = createPlatform(platform1_x,platform1_y,platform1_z,pos1_x,pos1_y,pos1_z);
-let platform1Body = bodyPlatform(platform1,platform1_x,platform1_y,platform1_z,pos1_x,pos1_y,pos1_z);
-// console.log("Position Platform : ", platform1.position);
+let platform2 = createPlatform(15,1,1,0,0,53);
+let platform2Body = bodyPlatform(platform2,15,1,1,0,0,53);
+
+let platform3 = createPlatform(15,1,1,0,0,58);
+let platform3Body = bodyPlatform(platform3,15,1,1,0,0,58);
+
+let platform4 = createPlatform(15,1,1,0,0,63);
+let platform4Body = bodyPlatform(platform3,15,1,1,0,0,63);
+
 scene.add(platform1);
+scene.add(platform2);
+scene.add(platform3);
+scene.add(platform4);
 world.addBody(platform1Body);
-challengeList.push(platform1);
+world.addBody(platform2Body);
+world.addBody(platform3Body);
+world.addBody(platform4Body);
 
 /*-------------------------------------*/
 
@@ -504,6 +525,9 @@ let debugRenderer = new CannonDebugRenderer(scene,world);
 //Main Loop
 const clock = new THREE.Clock();
 let speed1 = 0.05;
+let speed2 = -0.07;
+let speed3 = 0.09;
+let speed4 = -0.11;
 let mainLoop = function () {
     let mixerUpdateDelta = clock.getDelta();
     let data = clock.getElapsedTime()%2;
@@ -529,6 +553,18 @@ let mainLoop = function () {
     if (platform1Body.position.y >= 5 || platform1Body.position.y < -1) speed1 = -speed1;
     platform1Body.position.y +=speed1;
     platform1.position.copy(platform1Body.position);
+
+    if (platform2Body.position.y >= 5 || platform2Body.position.y < -1) speed2 = -speed2;
+    platform2Body.position.y +=speed2;
+    platform2.position.copy(platform2Body.position);
+
+    if (platform3Body.position.y >= 5 || platform3Body.position.y < -1) speed3 = -speed3;
+    platform3Body.position.y +=speed3;
+    platform3.position.copy(platform3Body.position);
+
+    if (platform4Body.position.y >= 5 || platform4Body.position.y < -1) speed4 = -speed4;
+    platform4Body.position.y +=speed4;
+    platform4.position.copy(platform4Body.position);
 
     if(rigidBodyPlayer.position.y < -2){
         console.log("Game Over");

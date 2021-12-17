@@ -17,8 +17,8 @@ export class CharacterControls {
         this.rotateQuaternion = new THREE.Quaternion();
         this.cameraTarget = new THREE.Vector3();
         this.fadeDuration = 0.1;
-        this.runVelocity = 5;
-        this.walkVelocity = 2;
+        this.runVelocity = 20;
+        this.walkVelocity = 4;
         this.model = model;
         this.rigidBody = rigidBody;
         this.mixer = mixer;
