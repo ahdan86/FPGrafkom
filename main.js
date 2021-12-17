@@ -415,16 +415,44 @@ let wall40 = createBoundaryWall(1,5,65, 115.1, 2.5, 115);
 // let wall
 
 //Challenge
-let challengeList =[]
+function tubePlatform(radius, height, radial){
+    let platformGeo = new THREE.CylinderGeometry(radius, radius, height, radial);
+    let platformMat = new THREE.MeshBasicMaterial({color:0xfc0f03});
+    let platformMesh = new THREE.Mesh(platformGeo, platformMat);
+    platformMesh.castShadow = true;
+
+    scene.add(platformMesh);
+
+    return platformMesh;
+}
+
+
 function createPlatform(width,height,depth){
     let platformGeo = new THREE.BoxGeometry(width,height,depth);
     let platformMat = new THREE.MeshBasicMaterial({color:0xfc0f03});
     let platformMesh = new THREE.Mesh(platformGeo, platformMat);
     platformMesh.castShadow = true;
-    platformMesh.receiveShadow = true;
+
+    scene.add(platformMesh);
 
     return platformMesh;
 }
+
+function bodyTube(tMesh, radius, height, radial ,posX, posY, posZ){
+    let tube = new CANNON.Cylinder(radius, radius, height, radial);
+    let tubeBody = new CANNON.Body({shape:tube, mass:0});
+    tubeBody.position.set(posX,posY,posZ);
+
+    tubeBody.collisionResponse = 0;
+    tubeBody.addEventListener("collide", function(e){ console.log("collided"); } );
+
+    tMesh.position.copy(tubeBody.position);
+    tMesh.quaternion.copy(tubeBody.quaternion);
+
+    world.addBody(tubeBody);
+
+    return tubeBody;
+}   
 
 function bodyPlatform(bMesh,x,y,z,posX,posY,posZ){
     let box = new CANNON.Box(new CANNON.Vec3(x/2,y/2,z/2));
@@ -437,119 +465,95 @@ function bodyPlatform(bMesh,x,y,z,posX,posY,posZ){
     bMesh.position.copy(boxBody.position);
     bMesh.quaternion.copy(boxBody.quaternion);
 
+    world.addBody(boxBody);
+
     return boxBody;
 }
 
-let platform1 = createPlatform(15,1,1,0,0,48);
+let platform1 = createPlatform(15,1,1);
 let platform1Body = bodyPlatform(platform1,15,1,1,0,0,48);
 
-let platform2 = createPlatform(15,1,1,0,0,53);
+let platform2 = createPlatform(15,1,1);
 let platform2Body = bodyPlatform(platform2,15,1,1,0,0,53);
 
-let platform3 = createPlatform(15,1,1,0,0,58);
+let platform3 = createPlatform(15,1,1);
 let platform3Body = bodyPlatform(platform3,15,1,1,0,0,58);
 
-let platform4 = createPlatform(15,1,1,0,0,63);
+let platform4 = createPlatform(15,1,1);
 let platform4Body = bodyPlatform(platform4,15,1,1,0,0,63);
 
-let platform5 = createPlatform(20,4,1, 37.5, 2, 30);
+let platform5 = createPlatform(20,4,1);
 let platform5Body = bodyPlatform(platform5,20,4,1, 37.5, 2.1, 30);
 
-let platform6 = createPlatform(1,4,22.3, 37.5, 2, 30);
+let platform6 = createPlatform(1,4,22.3);
 let platform6Body = bodyPlatform(platform6,1,4,22.3, 37.5, 2, 30);
 
-let platform7 = createPlatform(1, 1,10.3, 25.2, 0.5, 10.9);
+let platform7 = createPlatform(1, 1,10.3);
 let platform7Body = bodyPlatform(platform7,1,1,10.3, 25.2, 0.5, 10.9);
 
-let platform8 = createPlatform(1, 1,10.3, 65.2, 0.5, 10.9);
+let platform8 = createPlatform(1, 1,10.3);
 let platform8Body = bodyPlatform(platform8,1,1,10.3, 65.2, 0.5, 10.9);
 
-let platform9 = createPlatform(1, 1,10.3, 25.2, 0.5, -2.7);
+let platform9 = createPlatform(1, 1,10.3);
 let platform9Body = bodyPlatform(platform9,1,1,10.3, 25.2, 0.5, -2.7);
 
-let platform10 = createPlatform(1, 1,10.3, 65.2, 0.5, -2.7);
+let platform10 = createPlatform(1, 1,10.3);
 let platform10Body = bodyPlatform(platform10,1,1,10.3, 65.2, 0.5, -2.7);
 
-let platform11 = createPlatform(1, 1,10.3, 25.2, 1.7, 10.9);
-let platform11Body = bodyPlatform(platform11, 1, 1,10.3, 25.2, 1.7, 10.9);
+let platform11 = createPlatform(1, 1,10.3);
+let platform11Body = bodyPlatform(platform11, 1, 1,10.3, 25.2, 2.3, 10.9);
 
-let platform12 = createPlatform(1, 1,10.3, 25.2, 1.7, -2.7);
-let platform12Body = bodyPlatform(platform12, 1, 1,10.3, 25.2, 1.7, -2.7);
+let platform12 = createPlatform(1, 1,10.3);
+let platform12Body = bodyPlatform(platform12, 1, 1,10.3, 25.2, 2.3, -2.7);
 
-let platform13 = createPlatform(1,4,18.5, 48.3, 2, 55.14);
+let platform13 = createPlatform(1,4,18.5);
 let platform13Body = bodyPlatform(platform13, 1,4,18.5, 48.3, 2, 55.14);
 
-let platform14 = createPlatform(18.5,4,1, 48.3, 2, 55.14);
+let platform14 = createPlatform(18.5,4,1);
 let platform14Body = bodyPlatform(platform14, 18.5,4,1, 48.3, 2, 55.14);
 
-let platform15 = createPlatform(10,1,1, 54.2, 0, 39.42);
+let platform15 = createPlatform(10,1,1);
 let platform15Body = bodyPlatform(platform15,10,1,1, 54.2, 0, 39.42);
 
-let platform16 = createPlatform(10,1,1, 54.2, 0, 35.42);
+let platform16 = createPlatform(10,1,1);
 let platform16Body = bodyPlatform(platform16,10,1,1, 54.2, 0, 35.42);
 
-let platform17 = createPlatform(10,1,1, 54.2, 0, 31.42);
+let platform17 = createPlatform(10,1,1);
 let platform17Body = bodyPlatform(platform17,10,1,1, 54.2, 0, 31.42);
 
-let platform18 = createPlatform(1,1,11, 60, 0, 24);
+let platform18 = createPlatform(1,1,11);
 let platform18Body = bodyPlatform(platform18,1,1,11, 60, 0, 24);
 
-let platform19 = createPlatform(1,1,11, 64, 0, 24);
+let platform19 = createPlatform(1,1,11);
 let platform19Body = bodyPlatform(platform19,1,1,11, 64, 0, 24);
 
-let platform20 = createPlatform(1,1,11, 68, 0, 24);
+let platform20 = createPlatform(1,1,11);
 let platform20Body = bodyPlatform(platform20,1,1,11, 68, 0, 24);
 
-let platform21 = createPlatform(1,1,11, 72, 0, 24);
+let platform21 = createPlatform(1,1,11);
 let platform21Body = bodyPlatform(platform21,1,1,11, 72, 0, 24);
 
-let platform22 = createPlatform(1,1,11, 76, 0, 24);
+let platform22 = createPlatform(1,1,11);
 let platform22Body = bodyPlatform(platform22,1,1,11, 76, 0, 24);
 
-scene.add(platform1);
-scene.add(platform2);
-scene.add(platform3);
-scene.add(platform4);
-scene.add(platform5);
-scene.add(platform6);
-scene.add(platform7);
-scene.add(platform8);
-scene.add(platform9);
-scene.add(platform10);
-scene.add(platform11);
-scene.add(platform12);
-scene.add(platform13);
-scene.add(platform14);
-scene.add(platform15);
-scene.add(platform16);
-scene.add(platform17);
-scene.add(platform18);
-scene.add(platform19);
-scene.add(platform20);
-scene.add(platform21);
-scene.add(platform22);
-world.addBody(platform1Body);
-world.addBody(platform2Body);
-world.addBody(platform3Body);
-world.addBody(platform4Body);
-world.addBody(platform5Body);
-world.addBody(platform6Body);
-world.addBody(platform7Body);
-world.addBody(platform8Body);
-world.addBody(platform9Body);
-world.addBody(platform10Body);
-world.addBody(platform11Body);
-world.addBody(platform12Body);
-world.addBody(platform13Body);
-world.addBody(platform14Body);
-world.addBody(platform15Body);
-world.addBody(platform16Body);
-world.addBody(platform17Body);
-world.addBody(platform18Body);
-world.addBody(platform19Body);
-world.addBody(platform20Body);
-world.addBody(platform21Body);
-world.addBody(platform22Body);
+let platform23 = tubePlatform(1, 4, 30);
+let platform23Body = bodyTube(platform23, 10, 2, 30, 5.7, 2.2, 79.8);
+
+let platform24 = tubePlatform(1, 4, 30);
+let platform24Body = bodyTube(platform24, 10, 2, 30, -6.2, 2.2, 89.8);
+
+let platform25 = tubePlatform(1, 4, 30);
+let platform25Body = bodyTube(platform25, 10, 2, 30, 5.7, 2.2, 99.8);
+
+let platform26 = tubePlatform(1, 4, 30);
+let platform26Body = bodyTube(platform26, 10, 2, 30, -6.2, 2.2, 109.8);
+
+let platform27 = tubePlatform(1, 4, 30);
+let platform27Body = bodyTube(platform27, 10, 2, 30, 5.7, 2.2, 119.8);
+
+let platform28 = tubePlatform(1, 4, 30);
+let platform28Body = bodyTube(platform28, 10, 2, 30, -6.2, 2.2, 129.8);
+
 
 /*-------------------------------------*/
 
@@ -632,28 +636,43 @@ document.addEventListener("keyup", (event) => {
 }, false);
 /*----------------------------------------*/
 
-let debugRenderer = new CannonDebugRenderer(scene,world);
+// let debugRenderer = new CannonDebugRenderer(scene,world);
 
 //Main Loop
 const clock = new THREE.Clock();
+
+// Challenge1 (depan spawn)
 let speed1 = 0.05;
 let speed2 = -0.07;
 let speed3 = 0.09;
 let speed4 = -0.21;
+
+// Challenge 2 Tingkat
 let speed7 = 0.15;
 let speed8 = -0.15;
 let speed9 = 0.15;
 let speed10 = -0.15;
 let speed11 = 0.2;
 let speed12 = 0.2;
+
+// Mirip Challenge1 (tengah)
 let speed15 = 0.05;
 let speed16 = -0.07;
 let speed17 = 0.09;
 let speed18 = 0.1;
+
 let speed19 = -0.12;
 let speed20 = 0.14;
 let speed21 = -0.16;
 let speed22 = 0.2; 
+
+//Challenge cylinder bawah sendiri
+let speed23 = 0.1;
+let speed24 = -0.1;
+let speed25 = 0.1;
+let speed26 = -0.2;
+let speed27 = 0.2;
+let speed28 = -0.2;
 let mainLoop = function () {
     let mixerUpdateDelta = clock.getDelta();
     let data = clock.getElapsedTime()%2;
@@ -692,10 +711,10 @@ let mainLoop = function () {
     platform4Body.position.y +=speed4;
     platform4.position.copy(platform4Body.position);
 
-    platform5.rotation.y += 0.02;
+    platform5.rotation.y += 0.013;
     platform5Body.quaternion.copy(platform5.quaternion);
 
-    platform6.rotation.y += 0.02;
+    platform6.rotation.y += 0.013;
     platform6Body.quaternion.copy(platform6.quaternion);
 
     if (platform7Body.position.x >= 45.2 || platform7Body.position.x < 25.2) speed7 = -speed7;
@@ -718,7 +737,7 @@ let mainLoop = function () {
     platform11Body.position.x += speed11;
     platform11.position.copy(platform11Body.position);
 
-    if (platform11Body.position.x >= 65.2 || platform11Body.position.x < 25.2) speed12 = -speed12;
+    if (platform12Body.position.x >= 65.2 || platform12Body.position.x < 25.2) speed12 = -speed12;
     platform12Body.position.x += speed12;
     platform12.position.copy(platform12Body.position);
 
@@ -765,7 +784,31 @@ let mainLoop = function () {
     platform22Body.position.y +=speed22;
     platform22.position.copy(platform22Body.position);
 
-    debugRenderer.update();
+
+    function moveCylinder(bodyPosition, meshPosition, speed){
+        bodyPosition.x +=speed;
+        meshPosition.copy(bodyPosition);
+    }
+
+    if(platform23Body.position.x <= -6.3 || platform23Body.position.x > 5.8) speed23 = -speed23;
+    moveCylinder(platform23Body.position, platform23.position, speed23);
+
+    if(platform24Body.position.x <= -6.3 || platform24Body.position.x > 5.8) speed24 = -speed24;
+    moveCylinder(platform24Body.position, platform24.position, speed24);
+
+    if(platform25Body.position.x <= -6.3 || platform25Body.position.x > 5.8) speed25 = -speed25;
+    moveCylinder(platform25Body.position, platform25.position, speed25);
+
+    if(platform26Body.position.x <= -6.3 || platform26Body.position.x > 5.8) speed26 = -speed26;
+    moveCylinder(platform26Body.position, platform26.position, speed26);
+
+    if(platform27Body.position.x <= -6.3 || platform27Body.position.x > 5.8) speed27 = -speed27;
+    moveCylinder(platform27Body.position, platform27.position, speed27);
+
+    if(platform28Body.position.x <= -6.3 || platform28Body.position.x > 5.8) speed28 = -speed28;
+    moveCylinder(platform28Body.position, platform28.position, speed28);
+
+    // debugRenderer.update();
     renderer.render(scene, camera);
     requestAnimationFrame(mainLoop);
 };
