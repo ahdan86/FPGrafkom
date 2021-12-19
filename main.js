@@ -10,236 +10,236 @@ import { CharacterControls } from "./characterControls.js";
 //  * @param {CANNON.World} world
 //  * @param {object} [options]
 //  */
-let CannonDebugRenderer = function(scene, world, options){
-    options = options || {};
+// let CannonDebugRenderer = function(scene, world, options){
+//     options = options || {};
 
-    this.scene = scene;
-    this.world = world;
+//     this.scene = scene;
+//     this.world = world;
 
-    this._meshes = [];
+//     this._meshes = [];
 
-    this._material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
-    this._sphereGeometry = new THREE.SphereGeometry(1);
-    this._boxGeometry = new THREE.BoxGeometry(1, 1, 1);
-    this._planeGeometry = new THREE.PlaneGeometry( 10, 10, 10, 10 );
-    this._cylinderGeometry = new THREE.CylinderGeometry( 1, 1, 10, 10 );
-};
+//     this._material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
+//     this._sphereGeometry = new THREE.SphereGeometry(1);
+//     this._boxGeometry = new THREE.BoxGeometry(1, 1, 1);
+//     this._planeGeometry = new THREE.PlaneGeometry( 10, 10, 10, 10 );
+//     this._cylinderGeometry = new THREE.CylinderGeometry( 1, 1, 10, 10 );
+// };
 
-CannonDebugRenderer.prototype = {
+// CannonDebugRenderer.prototype = {
 
-    tmpVec0: new CANNON.Vec3(),
-    tmpVec1: new CANNON.Vec3(),
-    tmpVec2: new CANNON.Vec3(),
-    tmpQuat0: new CANNON.Vec3(),
+//     tmpVec0: new CANNON.Vec3(),
+//     tmpVec1: new CANNON.Vec3(),
+//     tmpVec2: new CANNON.Vec3(),
+//     tmpQuat0: new CANNON.Vec3(),
 
-    update: function(){
+//     update: function(){
 
-        var bodies = this.world.bodies;
-        var meshes = this._meshes;
-        var shapeWorldPosition = this.tmpVec0;
-        var shapeWorldQuaternion = this.tmpQuat0;
+//         var bodies = this.world.bodies;
+//         var meshes = this._meshes;
+//         var shapeWorldPosition = this.tmpVec0;
+//         var shapeWorldQuaternion = this.tmpQuat0;
 
-        var meshIndex = 0;
+//         var meshIndex = 0;
 
-        for (var i = 0; i !== bodies.length; i++) {
-            var body = bodies[i];
+//         for (var i = 0; i !== bodies.length; i++) {
+//             var body = bodies[i];
 
-            for (var j = 0; j !== body.shapes.length; j++) {
-                var shape = body.shapes[j];
+//             for (var j = 0; j !== body.shapes.length; j++) {
+//                 var shape = body.shapes[j];
 
-                this._updateMesh(meshIndex, body, shape);
+//                 this._updateMesh(meshIndex, body, shape);
 
-                var mesh = meshes[meshIndex];
+//                 var mesh = meshes[meshIndex];
 
-                if(mesh){
+//                 if(mesh){
 
-                    // Get world position
-                    body.quaternion.vmult(body.shapeOffsets[j], shapeWorldPosition);
-                    body.position.vadd(shapeWorldPosition, shapeWorldPosition);
+//                     // Get world position
+//                     body.quaternion.vmult(body.shapeOffsets[j], shapeWorldPosition);
+//                     body.position.vadd(shapeWorldPosition, shapeWorldPosition);
 
-                    // Get world quaternion
-                    body.quaternion.mult(body.shapeOrientations[j], shapeWorldQuaternion);
+//                     // Get world quaternion
+//                     body.quaternion.mult(body.shapeOrientations[j], shapeWorldQuaternion);
 
-                    // Copy to meshes
-                    mesh.position.copy(shapeWorldPosition);
-                    mesh.quaternion.copy(shapeWorldQuaternion);
-                }
+//                     // Copy to meshes
+//                     mesh.position.copy(shapeWorldPosition);
+//                     mesh.quaternion.copy(shapeWorldQuaternion);
+//                 }
 
-                meshIndex++;
-            }
-        }
+//                 meshIndex++;
+//             }
+//         }
 
-        for(var i = meshIndex; i < meshes.length; i++){
-            var mesh = meshes[i];
-            if(mesh){
-                this.scene.remove(mesh);
-            }
-        }
+//         for(var i = meshIndex; i < meshes.length; i++){
+//             var mesh = meshes[i];
+//             if(mesh){
+//                 this.scene.remove(mesh);
+//             }
+//         }
 
-        meshes.length = meshIndex;
-    },
+//         meshes.length = meshIndex;
+//     },
 
-    _updateMesh: function(index, body, shape){
-        var mesh = this._meshes[index];
-        if(!this._typeMatch(mesh, shape)){
-            if(mesh){
-                this.scene.remove(mesh);
-            }
-            mesh = this._meshes[index] = this._createMesh(shape);
-        }
-        this._scaleMesh(mesh, shape);
-    },
+//     _updateMesh: function(index, body, shape){
+//         var mesh = this._meshes[index];
+//         if(!this._typeMatch(mesh, shape)){
+//             if(mesh){
+//                 this.scene.remove(mesh);
+//             }
+//             mesh = this._meshes[index] = this._createMesh(shape);
+//         }
+//         this._scaleMesh(mesh, shape);
+//     },
 
-    _typeMatch: function(mesh, shape){
-        if(!mesh){
-            return false;
-        }
-        var geo = mesh.geometry;
-        return (
-            (geo instanceof THREE.SphereGeometry && shape instanceof CANNON.Sphere) ||
-            (geo instanceof THREE.BoxGeometry && shape instanceof CANNON.Box) ||
-            (geo instanceof THREE.PlaneGeometry && shape instanceof CANNON.Plane) ||
-            (geo.id === shape.geometryId && shape instanceof CANNON.ConvexPolyhedron) ||
-            (geo.id === shape.geometryId && shape instanceof CANNON.Trimesh) ||
-            (geo.id === shape.geometryId && shape instanceof CANNON.Heightfield)
-        );
-    },
+//     _typeMatch: function(mesh, shape){
+//         if(!mesh){
+//             return false;
+//         }
+//         var geo = mesh.geometry;
+//         return (
+//             (geo instanceof THREE.SphereGeometry && shape instanceof CANNON.Sphere) ||
+//             (geo instanceof THREE.BoxGeometry && shape instanceof CANNON.Box) ||
+//             (geo instanceof THREE.PlaneGeometry && shape instanceof CANNON.Plane) ||
+//             (geo.id === shape.geometryId && shape instanceof CANNON.ConvexPolyhedron) ||
+//             (geo.id === shape.geometryId && shape instanceof CANNON.Trimesh) ||
+//             (geo.id === shape.geometryId && shape instanceof CANNON.Heightfield)
+//         );
+//     },
 
-    _createMesh: function(shape){
-        var mesh;
-        var material = this._material;
+//     _createMesh: function(shape){
+//         var mesh;
+//         var material = this._material;
 
-        switch(shape.type){
+//         switch(shape.type){
 
-        case CANNON.Shape.types.SPHERE:
-            mesh = new THREE.Mesh(this._sphereGeometry, material);
-            break;
+//         case CANNON.Shape.types.SPHERE:
+//             mesh = new THREE.Mesh(this._sphereGeometry, material);
+//             break;
 
-        case CANNON.Shape.types.BOX:
-            mesh = new THREE.Mesh(this._boxGeometry, material);
-            break;
+//         case CANNON.Shape.types.BOX:
+//             mesh = new THREE.Mesh(this._boxGeometry, material);
+//             break;
 
-        case CANNON.Shape.types.PLANE:
-            mesh = new THREE.Mesh(this._planeGeometry, material);
-            break;
+//         case CANNON.Shape.types.PLANE:
+//             mesh = new THREE.Mesh(this._planeGeometry, material);
+//             break;
 
-        case CANNON.Shape.types.CONVEXPOLYHEDRON:
-            // Create mesh
-            var geo = new THREE.Geometry();
+//         case CANNON.Shape.types.CONVEXPOLYHEDRON:
+//             // Create mesh
+//             var geo = new THREE.Geometry();
 
-            // Add vertices
-            for (var i = 0; i < shape.vertices.length; i++) {
-                var v = shape.vertices[i];
-                geo.vertices.push(new THREE.Vector3(v.x, v.y, v.z));
-            }
+//             // Add vertices
+//             for (var i = 0; i < shape.vertices.length; i++) {
+//                 var v = shape.vertices[i];
+//                 geo.vertices.push(new THREE.Vector3(v.x, v.y, v.z));
+//             }
 
-            for(var i=0; i < shape.faces.length; i++){
-                var face = shape.faces[i];
+//             for(var i=0; i < shape.faces.length; i++){
+//                 var face = shape.faces[i];
 
-                // add triangles
-                var a = face[0];
-                for (var j = 1; j < face.length - 1; j++) {
-                    var b = face[j];
-                    var c = face[j + 1];
-                    geo.faces.push(new THREE.Face3(a, b, c));
-                }
-            }
-            geo.computeBoundingSphere();
-            geo.computeFaceNormals();
+//                 // add triangles
+//                 var a = face[0];
+//                 for (var j = 1; j < face.length - 1; j++) {
+//                     var b = face[j];
+//                     var c = face[j + 1];
+//                     geo.faces.push(new THREE.Face3(a, b, c));
+//                 }
+//             }
+//             geo.computeBoundingSphere();
+//             geo.computeFaceNormals();
 
-            mesh = new THREE.Mesh(geo, material);
-            shape.geometryId = geo.id;
-            break;
+//             mesh = new THREE.Mesh(geo, material);
+//             shape.geometryId = geo.id;
+//             break;
 
-        case CANNON.Shape.types.TRIMESH:
-            var geometry = new THREE.Geometry();
-            var v0 = this.tmpVec0;
-            var v1 = this.tmpVec1;
-            var v2 = this.tmpVec2;
-            for (var i = 0; i < shape.indices.length / 3; i++) {
-                shape.getTriangleVertices(i, v0, v1, v2);
-                geometry.vertices.push(
-                    new THREE.Vector3(v0.x, v0.y, v0.z),
-                    new THREE.Vector3(v1.x, v1.y, v1.z),
-                    new THREE.Vector3(v2.x, v2.y, v2.z)
-                );
-                var j = geometry.vertices.length - 3;
-                geometry.faces.push(new THREE.Face3(j, j+1, j+2));
-            }
-            geometry.computeBoundingSphere();
-            geometry.computeFaceNormals();
-            mesh = new THREE.Mesh(geometry, material);
-            shape.geometryId = geometry.id;
-            break;
+//         case CANNON.Shape.types.TRIMESH:
+//             var geometry = new THREE.Geometry();
+//             var v0 = this.tmpVec0;
+//             var v1 = this.tmpVec1;
+//             var v2 = this.tmpVec2;
+//             for (var i = 0; i < shape.indices.length / 3; i++) {
+//                 shape.getTriangleVertices(i, v0, v1, v2);
+//                 geometry.vertices.push(
+//                     new THREE.Vector3(v0.x, v0.y, v0.z),
+//                     new THREE.Vector3(v1.x, v1.y, v1.z),
+//                     new THREE.Vector3(v2.x, v2.y, v2.z)
+//                 );
+//                 var j = geometry.vertices.length - 3;
+//                 geometry.faces.push(new THREE.Face3(j, j+1, j+2));
+//             }
+//             geometry.computeBoundingSphere();
+//             geometry.computeFaceNormals();
+//             mesh = new THREE.Mesh(geometry, material);
+//             shape.geometryId = geometry.id;
+//             break;
 
-        case CANNON.Shape.types.HEIGHTFIELD:
-            var geometry = new THREE.Geometry();
+//         case CANNON.Shape.types.HEIGHTFIELD:
+//             var geometry = new THREE.Geometry();
 
-            var v0 = this.tmpVec0;
-            var v1 = this.tmpVec1;
-            var v2 = this.tmpVec2;
-            for (var xi = 0; xi < shape.data.length - 1; xi++) {
-                for (var yi = 0; yi < shape.data[xi].length - 1; yi++) {
-                    for (var k = 0; k < 2; k++) {
-                        shape.getConvexTrianglePillar(xi, yi, k===0);
-                        v0.copy(shape.pillarConvex.vertices[0]);
-                        v1.copy(shape.pillarConvex.vertices[1]);
-                        v2.copy(shape.pillarConvex.vertices[2]);
-                        v0.vadd(shape.pillarOffset, v0);
-                        v1.vadd(shape.pillarOffset, v1);
-                        v2.vadd(shape.pillarOffset, v2);
-                        geometry.vertices.push(
-                            new THREE.Vector3(v0.x, v0.y, v0.z),
-                            new THREE.Vector3(v1.x, v1.y, v1.z),
-                            new THREE.Vector3(v2.x, v2.y, v2.z)
-                        );
-                        var i = geometry.vertices.length - 3;
-                        geometry.faces.push(new THREE.Face3(i, i+1, i+2));
-                    }
-                }
-            }
-            geometry.computeBoundingSphere();
-            geometry.computeFaceNormals();
-            mesh = new THREE.Mesh(geometry, material);
-            shape.geometryId = geometry.id;
-            break;
-        }
+//             var v0 = this.tmpVec0;
+//             var v1 = this.tmpVec1;
+//             var v2 = this.tmpVec2;
+//             for (var xi = 0; xi < shape.data.length - 1; xi++) {
+//                 for (var yi = 0; yi < shape.data[xi].length - 1; yi++) {
+//                     for (var k = 0; k < 2; k++) {
+//                         shape.getConvexTrianglePillar(xi, yi, k===0);
+//                         v0.copy(shape.pillarConvex.vertices[0]);
+//                         v1.copy(shape.pillarConvex.vertices[1]);
+//                         v2.copy(shape.pillarConvex.vertices[2]);
+//                         v0.vadd(shape.pillarOffset, v0);
+//                         v1.vadd(shape.pillarOffset, v1);
+//                         v2.vadd(shape.pillarOffset, v2);
+//                         geometry.vertices.push(
+//                             new THREE.Vector3(v0.x, v0.y, v0.z),
+//                             new THREE.Vector3(v1.x, v1.y, v1.z),
+//                             new THREE.Vector3(v2.x, v2.y, v2.z)
+//                         );
+//                         var i = geometry.vertices.length - 3;
+//                         geometry.faces.push(new THREE.Face3(i, i+1, i+2));
+//                     }
+//                 }
+//             }
+//             geometry.computeBoundingSphere();
+//             geometry.computeFaceNormals();
+//             mesh = new THREE.Mesh(geometry, material);
+//             shape.geometryId = geometry.id;
+//             break;
+//         }
 
-        if(mesh){
-            this.scene.add(mesh);
-        }
+//         if(mesh){
+//             this.scene.add(mesh);
+//         }
 
-        return mesh;
-    },
+//         return mesh;
+//     },
 
-    _scaleMesh: function(mesh, shape){
-        switch(shape.type){
+//     _scaleMesh: function(mesh, shape){
+//         switch(shape.type){
 
-        case CANNON.Shape.types.SPHERE:
-            var radius = shape.radius;
-            mesh.scale.set(radius, radius, radius);
-            break;
+//         case CANNON.Shape.types.SPHERE:
+//             var radius = shape.radius;
+//             mesh.scale.set(radius, radius, radius);
+//             break;
 
-        case CANNON.Shape.types.BOX:
-            mesh.scale.copy(shape.halfExtents);
-            mesh.scale.multiplyScalar(2);
-            break;
+//         case CANNON.Shape.types.BOX:
+//             mesh.scale.copy(shape.halfExtents);
+//             mesh.scale.multiplyScalar(2);
+//             break;
 
-        case CANNON.Shape.types.CONVEXPOLYHEDRON:
-            mesh.scale.set(1,1,1);
-            break;
+//         case CANNON.Shape.types.CONVEXPOLYHEDRON:
+//             mesh.scale.set(1,1,1);
+//             break;
 
-        case CANNON.Shape.types.TRIMESH:
-            mesh.scale.copy(shape.scale);
-            break;
+//         case CANNON.Shape.types.TRIMESH:
+//             mesh.scale.copy(shape.scale);
+//             break;
 
-        case CANNON.Shape.types.HEIGHTFIELD:
-            mesh.scale.set(1,1,1);
-            break;
+//         case CANNON.Shape.types.HEIGHTFIELD:
+//             mesh.scale.set(1,1,1);
+//             break;
 
-        }
-    }
-};
+//         }
+//     }
+// };
 
 let canvas = document.getElementById("myCanvas");
 let mainMenuElement = document.getElementById("mainMenu");
@@ -251,10 +251,22 @@ document.getElementById("start").addEventListener("click", function(e){
     document.body.appendChild(renderer.domElement);
     mainLoop();
     hideMainMenu();
+
+    const sound = new THREE.Audio( listener );
+    // load a sound and set it as the Audio object's buffer
+    const audioLoader = new THREE.AudioLoader();
+        audioLoader.load( 'resources/background.mp3', function( buffer ) {
+        sound.setBuffer( buffer );
+        sound.setLoop( true );
+        sound.setVolume( 1.0 );
+        sound.play();
+    });
+
     canvas.style.display = "block";
     return;
 })
 
+let isDie=false;
 document.getElementById("retry").addEventListener("click", function(e){
     e.preventDefault();
     rigidBodyPlayer.position.set(0,2,0);
@@ -263,18 +275,22 @@ document.getElementById("retry").addEventListener("click", function(e){
     camera.position.set(5, 5, 0);
     gameOverMenu.classList.remove("d-flex");
     gameOverMenu.classList.add("d-none");
-    canvas.style.display = "block";
+    // canvas.style.display = "block";
+    gameOverMenu.style.position = "static";
+    isDie=false;
 })
 
 document.getElementById("again").addEventListener("click", function(e){
     e.preventDefault();
+    winMenu.classList.remove("d-flex");
+    winMenu.classList.add("d-none");
+    // canvas.style.display = "block";
+    winMenu.style.position = "static";
     rigidBodyPlayer.position.set(0,2,0);
     model.position.copy(rigidBodyPlayer.position);
     model.position.y = rigidBodyPlayer.position.y - 0.8;
     camera.position.set(5, 5, 0);
-    winMenu.classList.remove("d-flex");
-    winMenu.classList.add("d-none");
-    canvas.style.display = "block";
+    isDie=false;
 })
 
 function hideMainMenu(){
@@ -282,7 +298,25 @@ function hideMainMenu(){
 }
 
 function gameOver(){
-    canvas.style.display = "none";
+    // create a global audio source
+    const sound = new THREE.Audio( listener );
+    // load a sound and set it as the Audio object's buffer
+    const audioLoader = new THREE.AudioLoader();
+        audioLoader.load( 'resources/kalah.wav', function( buffer ) {
+        sound.setBuffer( buffer );
+        sound.setLoop( false );
+        sound.setVolume( 1.0 );
+        sound.play();
+    });
+
+    // canvas.style.display = "none";
+    gameOverMenu.style.zIndex = 69;
+    gameOverMenu.style.backgroundColor = "black";
+    gameOverMenu.style.position = "absolute";
+    gameOverMenu.style.left = "0px";
+    gameOverMenu.style.right = "0px";
+    gameOverMenu.style.top = "0px";
+    gameOverMenu.style.bottom = "-100px";
     gameOverMenu.classList.remove("d-none");
     gameOverMenu.classList.add("d-flex");
     gameOverMenu.classList.add("flex-column");
@@ -291,7 +325,25 @@ function gameOver(){
 }
 
 function win(){
-    canvas.style.display = "none";
+    // create a global audio source
+    const sound = new THREE.Audio( listener );
+    // load a sound and set it as the Audio object's buffer
+    const audioLoader = new THREE.AudioLoader();
+        audioLoader.load( 'resources/success.wav', function( buffer ) {
+        sound.setBuffer( buffer );
+        sound.setLoop( false );
+        sound.setVolume( 1.0 );
+        sound.play();
+    });
+
+    // canvas.style.display = "none";
+    winMenu.style.zIndex = 69;
+    winMenu.style.backgroundColor = "black";
+    winMenu.style.position = "absolute";
+    winMenu.style.left = "0px";
+    winMenu.style.right = "0px";
+    winMenu.style.top = "0px";
+    winMenu.style.bottom = "-100px";
     winMenu.classList.remove("d-none");
     winMenu.classList.add("d-flex");
     winMenu.classList.add("flex-column");
@@ -316,7 +368,7 @@ let createPlane = function () {
     });
     const plane = new THREE.Mesh(planeGeo, planeMat);
     plane.rotation.x = Math.PI * -0.5;
-    plane.castShadow = true;
+    // plane.castShadow = true;
     plane.receiveShadow = true;
     scene.add(plane);
 };
@@ -340,6 +392,9 @@ let urls = ["./skybox/px.png",
 let loader = new THREE.CubeTextureLoader();
 scene.background = loader.load(urls);
 
+/*-------------------Camera & Audio--------------------*/
+
+const listener = new THREE.AudioListener();
 
 const fov = 45;
 const aspect = window.innerWidth / window.innerHeight; // the canvas default
@@ -347,11 +402,13 @@ const near = 0.1;
 const far = 1000;
 let camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
 camera.position.set(5, 5, 0);
+camera.add(listener);
 
 /*--------------Physics Engine + Plane-----------------*/
 let world = new CANNON.World();
 world.gravity.set(0,-10,0);
 world.broadphase = new CANNON.NaiveBroadphase();
+world.solver.iterations = 40;
 let timestamp = 1.0/60.0;
 
 createPlane();
@@ -377,7 +434,7 @@ world.addBody(planeBody);
 let controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.minDistance = 5;
-controls.maxDistance = 8;
+controls.maxDistance = 7;
 controls.enablePan = false;
 // controls.enableZoom = false;
 controls.maxPolarAngle = Math.PI / 2 - 0.05;
@@ -389,13 +446,18 @@ const color = 0xffffff;
 const intensity = 1;
 const light = new THREE.DirectionalLight(color, intensity);
 light.position.set(0,10,0);
-light.target.position.set(-5,0,2);
+light.target.position.set(-5,0,10);
 light.castShadow = true;
 scene.add(light);
-light.shadow.mapSize.width = 1024;
-light.shadow.mapSize.height = 1024;
+scene.add(light.target);
+light.shadow.mapSize.width = 2048;
+light.shadow.mapSize.height = 2048;
 light.shadow.camera.near = 0.5; 
 light.shadow.camera.far = 500;
+light.shadowCameraLeft = -100;
+light.shadowCameraRight = 100;
+light.shadowCameraTop = 100;
+light.shadowCameraBottom = -100;
 
 // const helper = new THREE.CameraHelper( light.shadow.camera );
 // scene.add( helper );
@@ -406,14 +468,23 @@ light.shadow.camera.far = 500;
 function createBoundaryWall(x, y, z, posX, posY, posZ){
     let bGeo = new THREE.BoxGeometry(x,y,z);
     const loader = new THREE.TextureLoader();
-    const texture = loader.load("./resources/stone.jpeg");
-    texture.wrapS = THREE.RepeatWrapping;
-    texture.wrapT = THREE.RepeatWrapping;
-    texture.magFilter = THREE.NearestFilter;
-    let bMat = new THREE.MeshBasicMaterial({color:0xffffff, map:texture});
+    const texture = loader.load("./resources/brick.jpg");
+    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+    // texture.offset.set( 0, 0 );
+    // texture.repeat.set( 16, 16 );
+    // let repeats;
+    // if(x>z){
+    //     repeats = x*y/2;
+    // }
+    // else if(z>x){
+    //     repeats = z*y/2;
+    // }
+    texture.repeat.set(4, 4);
+    let bMat = new THREE.MeshBasicMaterial({map:texture});
     let bMesh = new THREE.Mesh(bGeo, bMat);
     // const repeats = planeSize / 2;
     // texture.repeat.set(repeats, repeats);
+    bMesh.castShadow = true;
     scene.add(bMesh);
 
     let box = new CANNON.Box(new CANNON.Vec3(x/2,y/2,z/2));
@@ -502,8 +573,11 @@ function bodyTube(tMesh, radius, height, radial ,posX, posY, posZ){
 
     tubeBody.collisionResponse = 0;
     tubeBody.addEventListener("collide", function(e){ 
-        console.log("collided");
-        gameOver(); 
+        if(isDie===false){
+            console.log("collided");
+            gameOver();
+            isDie = true;
+        }
     } );
 
     tMesh.position.copy(tubeBody.position);
@@ -521,9 +595,12 @@ function bodyPlatform(bMesh,x,y,z,posX,posY,posZ){
 
     boxBody.collisionResponse = 0; // no impact on other bodys
     boxBody.addEventListener("collide", function(e){ 
-        console.log("collided");
-        gameOver(); 
-    } );
+        if(isDie===false){
+            console.log("collided");
+            gameOver();
+            isDie = true;
+        }
+    });
     
     bMesh.position.copy(boxBody.position);
     bMesh.quaternion.copy(boxBody.quaternion);
@@ -690,6 +767,9 @@ let platform40Body = bodyPlatform(platform40, 12, 4, 1, 49, 2, 98);
 let platform41 = createPlatform(1, 4, 12);
 let platform41Body = bodyPlatform(platform41, 1, 4, 12, 49.3, 2, 98);
 
+let platform42 = createPlane(12,4,1);
+// let platform42Body = bodyPlatform(platform42,12,4,1, )
+
 
 /*-------------------------------------*/
 
@@ -761,6 +841,15 @@ document.addEventListener("keydown", (event) => {
     }
     else{
         if (canJump === true) {
+            const sound = new THREE.Audio( listener );
+            // load a sound and set it as the Audio object's buffer
+            const audioLoader = new THREE.AudioLoader();
+            audioLoader.load( 'resources/jump.wav', function( buffer ) {
+                sound.setBuffer( buffer );
+                sound.setLoop( false );
+                sound.setVolume( 1.0 );
+                sound.play();
+            });
             rigidBodyPlayer.velocity.y = jumpVelocity;
         }
         canJump = false;
@@ -778,41 +867,54 @@ document.addEventListener("keyup", (event) => {
 const clock = new THREE.Clock();
 
 // Challenge1 (depan spawn)
-let speed1 = 0.02;
-let speed2 = -0.03;
-let speed3 = 0.05;
+let speed1 = 0.03;
+let speed2 = -0.04;
+let speed3 = 0.06;
 let speed4 = -0.07;
 
 // Challenge 2 Tingkat
-let speed7 = 0.07;
-let speed8 = -0.07;
-let speed9 = 0.07;
-let speed10 = -0.07;
+let speed7 = 0.08;
+let speed8 = -0.08;
+let speed9 = 0.08;
+let speed10 = -0.08;
 let speed11 = 0.12;
 let speed12 = 0.12;
 
 // Mirip Challenge1 (tengah)
-let speed15 = 0.05;
-let speed16 = -0.07;
-let speed17 = 0.09;
-let speed18 = 0.1;
+let speed15 = 0.04;
+let speed16 = -0.05;
+let speed17 = 0.06;
+let speed18 = -0.07;
 
-let speed19 = -0.12;
-let speed20 = 0.14;
-let speed21 = -0.16;
-let speed22 = 0.2; 
+let speed19 = -0.07;
+let speed20 = 0.07;
+let speed21 = -0.08;
+let speed22 = 0.08;
 
 //Challenge cylinder bawah sendiri
-let speed23 = 0.05;
-let speed24 = -0.05;
-let speed25 = 0.05;
-let speed26 = -0.08;
-let speed27 = 0.08;
-let speed28 = -0.08;
+let speed23 = 0.06;
+let speed24 = -0.06;
+let speed25 = 0.06;
+let speed26 = -0.085;
+let speed27 = 0.085;
+let speed28 = -0.085;
+
+//Challenge Cyliner ke-2 (5 Biji)
+let speed33 = 0.06;
+let speed32 = -0.06;
+let speed31 = 0.06;
+let speed30 = -0.085;
+let speed29 = 0.085;
+
 let mainLoop = function () {
+    try{
+        world.step(timestamp);
+    }
+    catch(e){
+        console.log(e);
+    }
     let mixerUpdateDelta = clock.getDelta();
     let data = clock.getElapsedTime()%2;
-    world.step(timestamp);
     // bMesh.position.copy(boxBody.position);
     // bMesh.quaternion.copy(boxBody.quaternion);
 
@@ -877,10 +979,10 @@ let mainLoop = function () {
     platform12Body.position.x += speed12;
     platform12.position.copy(platform12Body.position);
 
-    if(rigidBodyPlayer.position.y < -2){
-        console.log("Game Over");
-        rigidBodyPlayer.position.set(0,2,0);
-    }
+    // if(rigidBodyPlayer.position.y < -2){
+    //     console.log("Game Over");
+    //     rigidBodyPlayer.position.set(0,2,0);
+    // }
 
     platform13.rotation.y += 0.008;
     platform13Body.quaternion.copy(platform13.quaternion);
@@ -944,6 +1046,22 @@ let mainLoop = function () {
     if(platform28Body.position.x <= -6.3 || platform28Body.position.x > 5.8) speed28 = -speed28;
     moveCylinder(platform28Body.position, platform28.position, speed28);
 
+    if(platform29Body.position.x <= 61 || platform29Body.position.x > 78.1) speed29 = -speed29;
+    moveCylinder(platform29Body.position, platform29.position, speed29);
+
+    if(platform30Body.position.x <= 61 || platform30Body.position.x > 78.1) speed30 = -speed30;
+    moveCylinder(platform30Body.position, platform30.position, speed30);
+
+    if(platform31Body.position.x <= 61 || platform31Body.position.x > 78.1) speed31 = -speed31;
+    moveCylinder(platform31Body.position, platform31.position, speed31);
+
+    if(platform32Body.position.x <= 61 || platform32Body.position.x > 78.1) speed32 = -speed32;
+    moveCylinder(platform32Body.position, platform32.position, speed32);
+
+    if(platform33Body.position.x <= 61 || platform33Body.position.x > 78.1) speed33 = -speed33;
+    moveCylinder(platform33Body.position, platform33.position, speed33);
+    
+
     platform34.rotation.y += 0.01;
     platform34Body.quaternion.copy(platform34.quaternion);
 
@@ -973,7 +1091,6 @@ let mainLoop = function () {
 
     // debugRenderer.update();
     renderer.render(scene, camera);
-    requestAnimationFrame(mainLoop);
 };
 document.body.appendChild(renderer.domElement);
-mainLoop();
+renderer.setAnimationLoop(mainLoop);
